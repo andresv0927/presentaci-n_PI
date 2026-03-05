@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIT-RFID – Sistema Inteligente de Turnos</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050c1a;
+    --surface: #0a1628;
+    --accent: #00d4ff;
+    --accent2: #0066ff;
+    --accent3: #7b2fff;
+    --text: #e8f4ff;
+    --muted: #6b8aaa;
+    --danger: #ff3c6e;
+    --success: #00ffaa;
+    --card: rgba(10,22,40,0.85);
+    --border: rgba(0,212,255,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 7px; height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%,-50%);
+    box-shadow: 0 0 8px var(--accent);
+  }
+  .trail-dot {
+    position: fixed;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9997;
+    transform: translate(-50%,-50%);
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.1s;
+  }
+
+  /* Grid background */
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Ambient glow orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.18;
+    animation: float 8s ease-in-out infinite;
+  }
+  .orb1 { width: 500px; height: 500px; background: var(--accent2); top: -150px; left: -100px; }
+  .orb2 { width: 400px; height: 400px; background: var(--accent3); bottom: -100px; right: -80px; animation-delay: -4s; }
+  .orb3 { width: 300px; height: 300px; background: var(--accent); top: 50%; left: 50%; animation-delay: -2s; opacity: 0.08; }
+
+  @keyframes float {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(20px,-20px) scale(1.05); }
+  }
+
+  /* Slides container */
+  #slides-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateX(80px) scale(0.97);
+    transition: opacity 0.6s cubic-bezier(.77,0,.18,1), transform 0.6s cubic-bezier(.77,0,.18,1);
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    pointer-events: all;
+  }
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-80px) scale(0.97);
+  }
+
+  .slide-inner {
+    width: 100%;
+    max-width: 1100px;
+    position: relative;
+  }
+
+  /* ── SLIDE 1 – TÍTULO ── */
+  .slide-title-hero {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  .slide-title-hero .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border);
+    background: rgba(0,212,255,0.07);
+    padding: 6px 18px;
+    border-radius: 999px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .slide-title-hero .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,212,255,0.5); }
+    50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(0,212,255,0); }
+  }
+  .hero-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #ffffff 0%, var(--accent) 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 40px rgba(0,212,255,0.3));
+  }
+  .hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+  .hero-tags {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .hero-tag {
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .tag-rfid { background: rgba(0,102,255,0.15); color: var(--accent2); border: 1px solid rgba(0,102,255,0.3); }
+  .tag-cv { background: rgba(123,47,255,0.15); color: var(--accent3); border: 1px solid rgba(123,47,255,0.3); }
+  .tag-iot { background: rgba(0,212,255,0.1); color: var(--accent); border: 1px solid var(--border); }
+  .hero-uni {
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Space Mono', monospace;
+  }
+  .hero-line {
+    width: 200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  /* ── SLIDE HEADERS ── */
+  .slide-header {
+    margin-bottom: 40px;
+  }
+  .slide-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    opacity: 0.7;
+  }
+  .slide-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.6rem, 3vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 30%, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .slide-rule {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    margin-top: 14px;
+    border-radius: 2px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 28px;
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+  .card:hover {
+    border-color: rgba(0,212,255,0.35);
+    box-shadow: 0 8px 40px rgba(0,212,255,0.08);
+  }
+
+  /* ── GRID LAYOUTS ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid-2-1 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; }
+
+  /* ── PROBLEM LIST ── */
+  .problem-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    animation: slideInItem 0.5s ease both;
+  }
+  .problem-item:last-child { border-bottom: none; }
+  .problem-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+  .dot-danger { background: var(--danger); box-shadow: 0 0 10px var(--danger); }
+  .dot-accent { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+  .dot-warn { background: #ff9f00; box-shadow: 0 0 10px #ff9f00; }
+  .dot-success { background: var(--success); box-shadow: 0 0 10px var(--success); }
+  .dot-blue { background: var(--accent2); box-shadow: 0 0 10px var(--accent2); }
+  .dot-purple { background: var(--accent3); box-shadow: 0 0 10px var(--accent3); }
+
+  .problem-text { font-size: 0.9rem; line-height: 1.5; color: rgba(232,244,255,0.8); }
+  .problem-label { font-size: 0.7rem; font-family: 'Space Mono', monospace; color: var(--muted); margin-top: 2px; }
+
+  @keyframes slideInItem {
+    from { opacity: 0; transform: translateX(-15px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ── ODS CARDS ── */
+  .ods-card {
+    padding: 28px;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .ods-9 { background: linear-gradient(135deg, rgba(255,94,0,0.12), rgba(255,94,0,0.04)); border: 1px solid rgba(255,94,0,0.25); }
+  .ods-12 { background: linear-gradient(135deg, rgba(191,121,0,0.12), rgba(191,121,0,0.04)); border: 1px solid rgba(191,121,0,0.25); }
+  .ods-number {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 4rem;
+    font-weight: 900;
+    opacity: 0.12;
+    position: absolute;
+    top: -10px; right: 20px;
+    line-height: 1;
+  }
+  .ods-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 14px;
+  }
+  .tag-9 { background: rgba(255,94,0,0.2); color: #ff5e00; }
+  .tag-12 { background: rgba(255,191,0,0.2); color: #ffbf00; }
+  .ods-title { font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 12px; }
+  .ods-desc { font-size: 0.85rem; color: rgba(232,244,255,0.7); line-height: 1.6; }
+
+  /* ── OBJETIVO BOX ── */
+  .obj-block {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 22px;
+    border-radius: 14px;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .obj-what { background: rgba(0,212,255,0.07); border: 1px solid rgba(0,212,255,0.2); }
+  .obj-how { background: rgba(123,47,255,0.07); border: 1px solid rgba(123,47,255,0.2); }
+  .obj-why { background: rgba(0,255,170,0.07); border: 1px solid rgba(0,255,170,0.2); }
+  .obj-icon { font-size: 2rem; flex-shrink: 0; }
+  .obj-q { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
+  .obj-q-what { color: var(--accent); }
+  .obj-q-how { color: var(--accent3); }
+  .obj-q-why { color: var(--success); }
+  .obj-text { font-size: 0.92rem; line-height: 1.6; color: rgba(232,244,255,0.85); }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .flow-step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .flow-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .flow-dot-1 { background: rgba(0,212,255,0.2); border: 1.5px solid var(--accent); color: var(--accent); }
+  .flow-dot-2 { background: rgba(0,102,255,0.2); border: 1.5px solid var(--accent2); color: var(--accent2); }
+  .flow-dot-3 { background: rgba(123,47,255,0.2); border: 1.5px solid var(--accent3); color: var(--accent3); }
+  .flow-dot-4 { background: rgba(0,255,170,0.15); border: 1.5px solid var(--success); color: var(--success); }
+  .flow-dot-5 { background: rgba(255,60,110,0.15); border: 1.5px solid var(--danger); color: var(--danger); }
+  .flow-arrow {
+    width: 2px;
+    height: 14px;
+    background: linear-gradient(var(--accent), var(--accent2));
+    margin-left: 15px;
+    opacity: 0.4;
+  }
+  .flow-text { font-size: 0.88rem; color: rgba(232,244,255,0.8); }
+
+  /* ── TOOLS GRID ── */
+  .tool-chip {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.82rem;
+    color: rgba(232,244,255,0.75);
+    transition: all 0.2s;
+  }
+  .tool-chip:hover { background: rgba(0,212,255,0.08); border-color: var(--border); }
+  .tool-icon { font-size: 1.1rem; }
+
+  /* ── METRICS ── */
+  .metric-card {
+    text-align: center;
+    padding: 30px 20px;
+    border-radius: 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .metric-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+  }
+  .metric-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .metric-label { font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
+
+  /* ── CONCLU ── */
+  .tech-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin: 6px;
+  }
+  .pill-rfid { background: rgba(0,212,255,0.12); border: 1px solid rgba(0,212,255,0.3); color: var(--accent); }
+  .pill-iot { background: rgba(0,102,255,0.12); border: 1px solid rgba(0,102,255,0.3); color: var(--accent2); }
+  .pill-ml { background: rgba(123,47,255,0.12); border: 1px solid rgba(123,47,255,0.3); color: var(--accent3); }
+  .pill-auto { background: rgba(0,255,170,0.1); border: 1px solid rgba(0,255,170,0.25); color: var(--success); }
+  .pill-ops { background: rgba(255,60,110,0.1); border: 1px solid rgba(255,60,110,0.25); color: var(--danger); }
+
+  /* ── NAV ── */
+  #nav {
+    position: fixed;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 100;
+    background: rgba(5,12,26,0.85);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 10px 20px;
+    backdrop-filter: blur(20px);
+  }
+  .nav-btn {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: rgba(0,212,255,0.08);
+    color: var(--accent);
+    cursor: none;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { background: rgba(0,212,255,0.2); border-color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; }
+  #slide-counter {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    min-width: 52px;
+    text-align: center;
+  }
+  #progress-dots {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--muted);
+    transition: all 0.3s;
+    opacity: 0.4;
+  }
+  .dot.active { background: var(--accent); opacity: 1; box-shadow: 0 0 8px var(--accent); width: 18px; border-radius: 3px; }
+
+  /* ── SLIDE-SPECIFIC LAYOUTS ── */
+  .full-layout { width: 100%; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: 100%; }
+  .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; width: 100%; }
+
+  /* Number accent */
+  .num-accent {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--accent);
+    font-size: 0.8rem;
+    margin-right: 8px;
+    opacity: 0.7;
+  }
+
+  /* Section label inside card */
+  .card-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Keyword highlight */
+  .kw { color: var(--accent); font-weight: 500; }
+  .kw2 { color: var(--accent3); font-weight: 500; }
+  .kw3 { color: var(--success); font-weight: 500; }
+
+  /* Keyboard hint */
+  #key-hint {
+    position: fixed;
+    top: 28px;
+    right: 40px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    opacity: 0.5;
+    z-index: 100;
+  }
+
+  /* Slide number indicator top-left */
+  #slide-indicator {
+    position: fixed;
+    top: 28px;
+    left: 40px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 3px;
+    z-index: 100;
+    opacity: 0.7;
+  }
+
+  /* step number boxes for metodologia */
+  .step-box {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+    transition: all 0.2s;
+  }
+  .step-box:hover { border-color: var(--border); background: rgba(0,212,255,0.04); }
+  .step-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .step-content h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; }
+  .step-content p { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+  /* arch flow horizontal */
+  .arch-flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    padding: 10px 0 20px;
+    scrollbar-width: none;
+  }
+  .arch-node {
+    flex-shrink: 0;
+    text-align: center;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(10,22,40,0.9);
+    border: 1px solid var(--border);
+    min-width: 100px;
+    position: relative;
+  }
+  .arch-node-icon { font-size: 1.5rem; margin-bottom: 6px; }
+  .arch-node-label { font-size: 0.7rem; font-family: 'Space Mono', monospace; color: var(--muted); }
+  .arch-arrow {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 6px;
+    color: var(--accent);
+    font-size: 1.2rem;
+    opacity: 0.5;
+  }
+
+  /* Ensure active slides animate children */
+  .slide.active .card,
+  .slide.active .step-box,
+  .slide.active .ods-card,
+  .slide.active .obj-block,
+  .slide.active .metric-card,
+  .slide.active .tool-chip,
+  .slide.active .arch-node {
+    animation: fadeUp 0.5s ease both;
+  }
+  .slide.active .card:nth-child(2),
+  .slide.active .step-box:nth-child(2),
+  .slide.active .ods-card:nth-child(2) { animation-delay: 0.07s; }
+  .slide.active .card:nth-child(3),
+  .slide.active .step-box:nth-child(3) { animation-delay: 0.14s; }
+  .slide.active .card:nth-child(4),
+  .slide.active .step-box:nth-child(4) { animation-delay: 0.21s; }
+  .slide.active .card:nth-child(5) { animation-delay: 0.28s; }
+  .slide.active .card:nth-child(6) { animation-delay: 0.35s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scanline overlay */
+  .scanline {
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 50;
+  }
+
+  .conclusion-big {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(135deg, #fff, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.6;
+    margin: 20px 0;
+  }
+
+  .highlighted-stat {
+    display: inline-block;
+    font-family: 'Orbitron', monospace;
+    color: var(--success);
+    font-size: 1.1rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div id="trail-container"></div>
+<div class="grid-bg"></div>
+<div class="scanline"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<div id="slide-indicator">SIT-RFID</div>
+<div id="key-hint">← → NAVEGAR · ESC INICIO</div>
+
+<div id="slides-container">
+
+  <!-- SLIDE 1 – TÍTULO -->
+  <div class="slide active" id="slide-1">
+    <div class="slide-inner">
+      <div class="slide-title-hero">
+        <div class="badge">Proyecto Integrador · Ingeniería de Telecomunicaciones</div>
+        <div class="hero-title">SIT-RFID</div>
+        <div class="hero-line"></div>
+        <div class="hero-subtitle">Sistema Inteligente de Gestión de Turnos Vehiculares<br>Basado en RFID, Visión Artificial e IoT</div>
+        <div class="hero-tags">
+          <span class="hero-tag tag-rfid">📡 RFID UHF</span>
+          <span class="hero-tag tag-cv">👁 Machine Learning</span>
+          <span class="hero-tag tag-iot">🌐 IoT Architecture</span>
+        </div>
+        <div class="hero-uni">Ingeniería de Telecomunicaciones — 2025</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 – PROBLEMÁTICA -->
+  <div class="slide" id="slide-2">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <div class="slide-number">02 / CONTEXTO</div>
+        <div class="slide-title">Problemática</div>
+        <div class="slide-rule"></div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-label">Causas identificadas</div>
+          <div class="problem-item"><div class="problem-dot dot-danger"></div><div><div class="problem-text">Registro manual de ingreso vehicular</div></div></div>
+          <div class="problem-item"><div class="problem-dot dot-danger"></div><div><div class="problem-text">Errores humanos en digitación de datos</div></div></div>
+          <div class="problem-item"><div class="problem-dot dot-warn"></div><div><div class="problem-text">Largos tiempos de espera en cola</div></div></div>
+          <div class="problem-item"><div class="problem-dot dot-warn"></div><div><div class="problem-text">Mala asignación de técnicos disponibles</div></div></div>
+          <div class="problem-item"><div class="problem-dot dot-warn"></div><div><div class="problem-text">Falta de trazabilidad en tiempo real</div></div></div>
+          <div class="problem-item"><div class="problem-dot dot-muted"></div><div><div class="problem-text">Ausencia de analítica predictiva</div></div></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Consecuencias</div>
+          <div class="problem-item"><div class="problem-dot dot-danger"></div><div><div class="problem-text"><strong>Ineficiencia operativa</strong> en todo el flujo de atención</div></div></div>
+          <div class="problem-item"><div class="problem-dot dot-danger"></div><div><div class="problem-text"><strong>Pérdida de tiempo</strong> para clientes y técnicos</div></div></div>
+          <div class="problem-item"><div class="problem-dot dot-warn"></div><div><div class="problem-text"><strong>Mayor consumo</strong> de recursos humanos y materiales</div></div></div>
+          <div class="problem-item"><div class="problem-dot dot-danger"></div><div><div class="problem-text"><strong>Insatisfacción del cliente</strong> por esperas y errores</div></div></div>
+          <div style="margin-top:20px; padding:14px; border-radius:10px; background: rgba(255,60,110,0.07); border: 1px solid rgba(255,60,110,0.2);">
+            <div style="font-size:0.75rem; font-family:'Space Mono',monospace; color:var(--danger); margin-bottom:6px;">→ Diagnóstico</div>
+            <div style="font-size:0.82rem; color:rgba(232,244,255,0.7);">Los sistemas actuales operan de forma <span class="kw">aislada</span> sin integración multisensorial ni inteligencia operativa.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 – ODS -->
+  <div class="slide" id="slide-3">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <div class="slide-number">03 / ALINEACIÓN</div>
+        <div class="slide-title">ODS Relacionados</div>
+        <div class="slide-rule"></div>
+      </div>
+      <div style="margin-bottom:16px; font-size:0.85rem; color:var(--muted);">Proyecto alineado con los Objetivos de Desarrollo Sostenible de las Naciones Unidas</div>
+      <div class="two-col">
+        <div class="ods-card ods-9">
+          <div class="ods-number">9</div>
+          <div class="ods-tag tag-9">ODS 9</div>
+          <div class="ods-title">Industria, Innovación e Infraestructura</div>
+          <div class="ods-desc">Fomenta infraestructura tecnológica eficiente e innovación industrial aplicada a procesos de gestión y automatización en centros de servicio vehicular.</div>
+          <div style="margin-top:16px; display:flex; gap:8px; flex-wrap:wrap;">
+            <span style="font-size:0.72rem; padding:4px 10px; background:rgba(255,94,0,0.1); border-radius:4px; color:#ff7733;">Digitalización</span>
+            <span style="font-size:0.72rem; padding:4px 10px; background:rgba(255,94,0,0.1); border-radius:4px; color:#ff7733;">Infraestructura IoT</span>
+            <span style="font-size:0.72rem; padding:4px 10px; background:rgba(255,94,0,0.1); border-radius:4px; color:#ff7733;">Innovación aplicada</span>
+          </div>
+        </div>
+        <div class="ods-card ods-12">
+          <div class="ods-number">12</div>
+          <div class="ods-tag tag-12">ODS 12</div>
+          <div class="ods-title">Producción y Consumo Responsables</div>
+          <div class="ods-desc">Optimiza el uso de recursos humanos y materiales, reduce desperdicios operativos y mejora la eficiencia global del proceso de atención vehicular.</div>
+          <div style="margin-top:16px; display:flex; gap:8px; flex-wrap:wrap;">
+            <span style="font-size:0.72rem; padding:4px 10px; background:rgba(255,191,0,0.1); border-radius:4px; color:#ffbf00;">Menos papel</span>
+            <span style="font-size:0.72rem; padding:4px 10px; background:rgba(255,191,0,0.1); border-radius:4px; color:#ffbf00;">Recursos optimizados</span>
+            <span style="font-size:0.72rem; padding:4px 10px; background:rgba(255,191,0,0.1); border-radius:4px; color:#ffbf00;">Menos congestión</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 – OBJETIVO GENERAL -->
+  <div class="slide" id="slide-4">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <div class="slide-number">04 / MISIÓN</div>
+        <div class="slide-title">Objetivo General</div>
+        <div class="slide-rule"></div>
+      </div>
+      <div class="obj-block obj-what">
+        <div class="obj-icon">🎯</div>
+        <div>
+          <div class="obj-q obj-q-what">¿Qué?</div>
+          <div class="obj-text">Diseñar un <span class="kw">sistema inteligente</span> para la gestión automatizada de turnos vehiculares en centros de servicio y concesionarios.</div>
+        </div>
+      </div>
+      <div class="obj-block obj-how">
+        <div class="obj-icon">⚙️</div>
+        <div>
+          <div class="obj-q obj-q-how">¿Cómo?</div>
+          <div class="obj-text">Integrando tecnología <span class="kw2">RFID</span>, reconocimiento de placas con <span class="kw2">Machine Learning</span> y arquitectura <span class="kw2">IoT</span> distribuida.</div>
+        </div>
+      </div>
+      <div class="obj-block obj-why">
+        <div class="obj-icon">🚀</div>
+        <div>
+          <div class="obj-q obj-q-why">¿Para qué?</div>
+          <div class="obj-text">Para <span class="kw3">optimizar tiempos de atención</span>, mejorar la seguridad y aumentar la eficiencia operativa en concesionarios automotrices.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 – OBJETIVOS ESPECÍFICOS -->
+  <div class="slide" id="slide-5">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <div class="slide-number">05 / ALCANCE</div>
+        <div class="slide-title">Objetivos Específicos</div>
+        <div class="slide-rule"></div>
+      </div>
+      <div class="three-col">
+        <div class="card">
+          <div style="font-size:1.8rem; margin-bottom:12px;">📡</div>
+          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent); letter-spacing:2px; margin-bottom:8px;">OBJ 01</div>
+          <div style="font-size:0.88rem; line-height:1.5; color:rgba(232,244,255,0.8);">Implementar identificación vehicular mediante <span class="kw">RFID UHF</span> de alta precisión</div>
+        </div>
+        <div class="card">
+          <div style="font-size:1.8rem; margin-bottom:12px;">👁️</div>
+          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent); letter-spacing:2px; margin-bottom:8px;">OBJ 02</div>
+          <div style="font-size:0.88rem; line-height:1.5; color:rgba(232,244,255,0.8);">Desarrollar reconocimiento automático de <span class="kw">placas vehiculares</span> con ML</div>
+        </div>
+        <div class="card">
+          <div style="font-size:1.8rem; margin-bottom:12px;">🗄️</div>
+          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent); letter-spacing:2px; margin-bottom:8px;">OBJ 03</div>
+          <div style="font-size:0.88rem; line-height:1.5; color:rgba(232,244,255,0.8);">Diseñar un <span class="kw">backend</span> para almacenamiento y gestión de datos en tiempo real</div>
+        </div>
+        <div class="card">
+          <div style="font-size:1.8rem; margin-bottom:12px;">🔐</div>
+          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent); letter-spacing:2px; margin-bottom:8px;">OBJ 04</div>
+          <div style="font-size:0.88rem; line-height:1.5; color:rgba(232,244,255,0.8);">Implementar <span class="kw">validación cruzada</span> RFID + reconocimiento de placa</div>
+        </div>
+        <div class="card">
+          <div style="font-size:1.8rem; margin-bottom:12px;">🤖</div>
+          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent); letter-spacing:2px; margin-bottom:8px;">OBJ 05</div>
+          <div style="font-size:0.88rem; line-height:1.5; color:rgba(232,244,255,0.8);">Desarrollar algoritmo inteligente de <span class="kw">asignación de turnos</span> optimizada</div>
+        </div>
+        <div class="card">
+          <div style="font-size:1.8rem; margin-bottom:12px;">📊</div>
+          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent); letter-spacing:2px; margin-bottom:8px;">OBJ 06</div>
+          <div style="font-size:0.88rem; line-height:1.5; color:rgba(232,244,255,0.8);">Generar <span class="kw">métricas en tiempo real</span> para análisis operativo y toma de decisiones</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 – POBLACIÓN -->
+  <div class="slide" id="slide-6">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <div class="slide-number">06 / IMPACTO</div>
+        <div class="slide-title">Población Beneficiada</div>
+        <div class="slide-rule"></div>
+      </div>
+      <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:20px;">
+        <div>
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-label">Beneficiarios directos</div>
+            <div class="problem-item"><div class="problem-dot dot-accent"></div><div class="problem-text">🏢 <span class="kw">Concesionarios</span> automotrices</div></div>
+            <div class="problem-item"><div class="problem-dot dot-blue"></div><div class="problem-text">🔧 <span class="kw">Centros de servicio</span> vehicular</div></div>
+            <div class="problem-item"><div class="problem-dot dot-purple"></div><div class="problem-text">👷 <span class="kw">Personal técnico</span> asignado</div></div>
+            <div class="problem-item"><div class="problem-dot dot-success"></div><div class="problem-text">🚗 <span class="kw">Clientes</span> propietarios de vehículos</div></div>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div class="card" style="text-align:center;">
+            <div style="font-size:2rem; margin-bottom:6px;">⏱️</div>
+            <div style="font-size:0.82rem; color:var(--muted); line-height:1.4;">Reducción de<br><span class="kw" style="font-size:1rem; font-family:'Orbitron',sans-serif;">tiempos de espera</span></div>
+          </div>
+          <div class="card" style="text-align:center;">
+            <div style="font-size:2rem; margin-bottom:6px;">🛡️</div>
+            <div style="font-size:0.82rem; color:var(--muted); line-height:1.4;">Mayor<br><span class="kw" style="font-size:1rem; font-family:'Orbitron',sans-serif;">seguridad</span></div>
+          </div>
+          <div class="card" style="text-align:center;">
+            <div style="font-size:2rem; margin-bottom:6px;">📈</div>
+            <div style="font-size:0.82rem; color:var(--muted); line-height:1.4;">Optimización de<br><span class="kw" style="font-size:1rem; font-family:'Orbitron',sans-serif;">recursos humanos</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7 – ESTADO DEL ARTE -->
+  <div class="slide" id="slide-7">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <div class="slide-number">07 / CONTEXTO TÉCNICO</div>
+        <div class="slide-title">Estado del Arte</div>
+        <div class="slide-rule"></div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1.1fr; gap:18px;">
+        <div class="card">
+          <div class="card-label">Tecnologías existentes</div>
+          <div class="problem-item"><div class="problem-dot dot-blue"></div><div class="problem-text">Sistemas LPR (License Plate Recognition)</div></div>
+          <div class="problem-item"><div class="problem-dot dot-blue"></div><div class="problem-text">Sistemas RFID industriales</div></div>
+          <div class="problem-item"><div class="problem-dot dot-blue"></div><div class="problem-text">Software de gestión de turnos</div></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Limitaciones actuales</div>
+          <div class="problem-item"><div class="problem-dot dot-danger"></div><div class="problem-text">Operan de forma <strong>aislada</strong></div></div>
+          <div class="problem-item"><div class="problem-dot dot-danger"></div><div class="problem-text">Sin autenticación <strong>híbrida</strong></div></div>
+          <div class="problem-item"><div class="problem-dot dot-danger"></div><div class="problem-text">Sin optimización <strong>predictiva</strong></div></div>
+        </div>
+        <div class="card" style="background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(0,102,255,0.06)); border-color: rgba(0,212,255,0.25);">
+          <div class="card-label" style="color:var(--success);">↗ Propuesta innovadora</div>
+          <div style="font-size:1.5rem; margin-bottom:12px; text-align:center;">⚡</div>
+          <div style="font-size:0.88rem; line-height:1.65; color:rgba(232,244,255,0.85);">Sistema <span class="kw">multisensorial</span> con <span class="kw3">validación cruzada</span> RFID + Visión Artificial y análisis inteligente integrado — primera propuesta de este tipo para gestión vehicular.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8 – METODOLOGÍA -->
+  <div class="slide" id="slide-8">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <div class="slide-number">08 / PROCESO</div>
+        <div class="slide-title">Metodología</div>
+        <div class="slide-rule"></div>
+      </div>
+      <div>
+        <div class="step-box">
+          <div class="step-num" style="color:var(--accent);">01</div>
+          <div class="step-content">
+            <h4>Diseño del Sistema</h4>
+            <p>Arquitectura IoT distribuida — definición de capas, protocolos y flujos de datos entre sensores, backend y usuarios.</p>
+          </div>
+        </div>
+        <div class="step-box">
+          <div class="step-num" style="color:var(--accent2);">02</div>
+          <div class="step-content">
+            <h4>Implementación Física</h4>
+            <p>Instalación de lector RFID, cámara de reconocimiento, sensores ultrasónicos y barrera automatizada en el punto de acceso.</p>
+          </div>
+        </div>
+        <div class="step-box">
+          <div class="step-num" style="color:var(--accent3);">03</div>
+          <div class="step-content">
+            <h4>Desarrollo de Software</h4>
+            <p>Backend robusto, base de datos PostgreSQL, API REST, motor de asignación inteligente y modelo ML para OCR de placas.</p>
+          </div>
+        </div>
+        <div class="step-box">
+          <div class="step-num" style="color:var(--success);">04</div>
+          <div class="step-content">
+            <h4>Pruebas y Validación</h4>
+            <p>Evaluación de precisión de lectura, tiempos de respuesta del sistema y comparativa: registro manual vs sistema híbrido SIT-RFID.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9 – ARQUITECTURA -->
+  <div class="slide" id="slide-9">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <div class="slide-number">09 / ARQUITECTURA</div>
+        <div class="slide-title">Flujo del Sistema</div>
+        <div class="slide-rule"></div>
+      </div>
+      <div style="margin-bottom:20px;">
+        <div class="arch-flow">
+          <!-- CAPA SENSORIAL: azul -->
+          <div class="arch-node" data-layer="sensorial" data-color="accent">
+            <div class="arch-node-icon">🚗</div><div class="arch-node-label">Vehículo</div>
+          </div>
+          <div class="arch-arrow arch-arr" data-layer="sensorial">→</div>
+          <div class="arch-node" data-layer="sensorial" data-color="accent">
+            <div class="arch-node-icon">📡</div><div class="arch-node-label">RFID</div>
+          </div>
+          <div class="arch-arrow arch-arr" data-layer="sensorial">→</div>
+          <div class="arch-node" data-layer="sensorial" data-color="accent">
+            <div class="arch-node-icon">📷</div><div class="arch-node-label">Cámara</div>
+          </div>
+          <!-- CAPA INTELIGENCIA: morado -->
+          <div class="arch-arrow arch-arr" data-layer="inteligencia">→</div>
+          <div class="arch-node" data-layer="inteligencia" data-color="accent3">
+            <div class="arch-node-icon">🤖</div><div class="arch-node-label">ML / OCR</div>
+          </div>
+          <div class="arch-arrow arch-arr" data-layer="inteligencia">→</div>
+          <div class="arch-node" data-layer="inteligencia" data-color="accent3">
+            <div class="arch-node-icon">🔐</div><div class="arch-node-label">Validación</div>
+          </div>
+          <div class="arch-arrow arch-arr" data-layer="inteligencia">→</div>
+          <div class="arch-node" data-layer="inteligencia" data-color="accent3">
+            <div class="arch-node-icon">🎫</div><div class="arch-node-label">Turno</div>
+          </div>
+          <!-- CAPA ACTUACIÓN: verde -->
+          <div class="arch-arrow arch-arr" data-layer="actuacion">→</div>
+          <div class="arch-node" data-layer="actuacion" data-color="success">
+            <div class="arch-node-icon">🚧</div><div class="arch-node-label">Barrera</div>
+          </div>
+        </div>
+      </div>
+      <div class="three-col">
+        <!-- Tarjeta Sensorial -->
+        <div class="card layer-card" id="card-sensorial" data-layer="sensorial" style="padding:16px 20px; cursor:none; transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;">
+          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent); letter-spacing:2px; margin-bottom:10px;">CAPA SENSORIAL</div>
+          <div class="problem-item"><div class="problem-dot dot-accent"></div><div class="problem-text" style="font-size:0.8rem;">Sensor ultrasónico detecta vehículo</div></div>
+          <div class="problem-item"><div class="problem-dot dot-accent"></div><div class="problem-text" style="font-size:0.8rem;">RFID UHF lee ID de tag</div></div>
+          <div class="problem-item"><div class="problem-dot dot-accent"></div><div class="problem-text" style="font-size:0.8rem;">Cámara captura placa</div></div>
+        </div>
+        <!-- Tarjeta Inteligencia -->
+        <div class="card layer-card" id="card-inteligencia" data-layer="inteligencia" style="padding:16px 20px; cursor:none; transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;">
+          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent3); letter-spacing:2px; margin-bottom:10px;">CAPA INTELIGENCIA</div>
+          <div class="problem-item"><div class="problem-dot dot-purple"></div><div class="problem-text" style="font-size:0.8rem;">ML reconoce placa automáticamente</div></div>
+          <div class="problem-item"><div class="problem-dot dot-purple"></div><div class="problem-text" style="font-size:0.8rem;">Backend valida coincidencia cruzada</div></div>
+          <div class="problem-item"><div class="problem-dot dot-purple"></div><div class="problem-text" style="font-size:0.8rem;">Motor asigna turno óptimo</div></div>
+        </div>
+        <!-- Tarjeta Actuación -->
+        <div class="card layer-card" id="card-actuacion" data-layer="actuacion" style="padding:16px 20px; cursor:none; transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;">
+          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--success); letter-spacing:2px; margin-bottom:10px;">CAPA ACTUACIÓN</div>
+          <div class="problem-item"><div class="problem-dot dot-success"></div><div class="problem-text" style="font-size:0.8rem;">Registro automático hora de ingreso</div></div>
+          <div class="problem-item"><div class="problem-dot dot-success"></div><div class="problem-text" style="font-size:0.8rem;">Apertura automatizada de barrera</div></div>
+          <div class="problem-item"><div class="problem-dot dot-success"></div><div class="problem-text" style="font-size:0.8rem;">Comunicación MQTT segura</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* Colores de highlight por capa */
+    .arch-node { transition: border-color 0.3s, box-shadow 0.3s, background 0.3s, transform 0.3s; }
+    .arch-node.lit-accent  { border-color: var(--accent)  !important; background: rgba(0,212,255,0.15)  !important; box-shadow: 0 0 18px rgba(0,212,255,0.35)  !important; transform: scale(1.07); }
+    .arch-node.lit-accent3 { border-color: var(--accent3) !important; background: rgba(123,47,255,0.15) !important; box-shadow: 0 0 18px rgba(123,47,255,0.4)  !important; transform: scale(1.07); }
+    .arch-node.lit-success { border-color: var(--success) !important; background: rgba(0,255,170,0.12)  !important; box-shadow: 0 0 18px rgba(0,255,170,0.35)  !important; transform: scale(1.07); }
+    .arch-node.dimmed { opacity: 0.3; transform: scale(0.97); }
+
+    .arch-arr { transition: color 0.3s, opacity 0.3s; }
+    .arch-arr.lit-accent  { color: var(--accent);  opacity: 1 !important; }
+    .arch-arr.lit-accent3 { color: var(--accent3); opacity: 1 !important; }
+    .arch-arr.lit-success { color: var(--success); opacity: 1 !important; }
+    .arch-arr.dimmed { opacity: 0.1; }
+
+    .layer-card.lit-accent  { border-color: rgba(0,212,255,0.6)  !important; box-shadow: 0 0 30px rgba(0,212,255,0.15)  !important; background: rgba(0,212,255,0.06)  !important; }
+    .layer-card.lit-accent3 { border-color: rgba(123,47,255,0.6) !important; box-shadow: 0 0 30px rgba(123,47,255,0.15) !important; background: rgba(123,47,255,0.06) !important; }
+    .layer-card.lit-success { border-color: rgba(0,255,170,0.6)  !important; box-shadow: 0 0 30px rgba(0,255,170,0.12)  !important; background: rgba(0,255,170,0.05)  !important; }
+    .layer-card.dimmed { opacity: 0.35; }
+  </style>
+
+  <script>
+  (function(){
+    const layerColor = { sensorial: 'accent', inteligencia: 'accent3', actuacion: 'success' };
+    let activeLayer = null;
+
+    function activate(layer) {
+      if (activeLayer === layer) { reset(); return; }
+      activeLayer = layer;
+      const color = layerColor[layer];
+
+      // Nodes
+      document.querySelectorAll('.arch-node').forEach(n => {
+        const nl = n.dataset.layer;
+        n.classList.remove('lit-accent','lit-accent3','lit-success','dimmed');
+        n.classList.add(nl === layer ? 'lit-' + color : 'dimmed');
+      });
+      // Arrows
+      document.querySelectorAll('.arch-arr').forEach(a => {
+        const al = a.dataset.layer;
+        a.classList.remove('lit-accent','lit-accent3','lit-success','dimmed');
+        a.classList.add(al === layer ? 'lit-' + color : 'dimmed');
+      });
+      // Cards
+      document.querySelectorAll('.layer-card').forEach(c => {
+        const cl = c.dataset.layer;
+        c.classList.remove('lit-accent','lit-accent3','lit-success','dimmed');
+        c.classList.add(cl === layer ? 'lit-' + color : 'dimmed');
+      });
+    }
+
+    function reset() {
+      activeLayer = null;
+      document.querySelectorAll('.arch-node, .arch-arr, .layer-card')
+        .forEach(el => el.classList.remove('lit-accent','lit-accent3','lit-success','dimmed'));
+    }
+
+    // Click en tarjeta o nodo activa su capa (bidireccional)
+    document.querySelectorAll('.arch-node, .layer-card').forEach(el => {
+      el.addEventListener('click', e => {
+        e.stopPropagation();
+        activate(el.dataset.layer);
+      });
+    });
+
+    // Click en fondo del slide 9 = reset
+    document.getElementById('slide-9').addEventListener('click', reset);
+  })();
+  </script>
+
+  <!-- SLIDE 10 – HERRAMIENTAS -->
+  <div class="slide" id="slide-10">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <div class="slide-number">10 / TECNOLOGÍA</div>
+        <div class="slide-title">Stack Tecnológico</div>
+        <div class="slide-rule"></div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-label">Hardware</div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div class="tool-chip"><span class="tool-icon">📡</span> Lector RFID UHF</div>
+            <div class="tool-chip"><span class="tool-icon">🔌</span> ESP32 (microcontrolador IoT)</div>
+            <div class="tool-chip"><span class="tool-icon">📷</span> Módulo de cámara</div>
+            <div class="tool-chip"><span class="tool-icon">📏</span> Sensor ultrasónico de proximidad</div>
+            <div class="tool-chip"><span class="tool-icon">🚧</span> Servo-motor / Barrera automatizada</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Software</div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div class="tool-chip"><span class="tool-icon">🐍</span> Python — Machine Learning / OCR</div>
+            <div class="tool-chip"><span class="tool-icon">☕</span> Spring Boot / Node.js — Backend API</div>
+            <div class="tool-chip"><span class="tool-icon">🗄️</span> PostgreSQL — Base de datos</div>
+            <div class="tool-chip"><span class="tool-icon">📨</span> MQTT — Protocolo IoT</div>
+            <div class="tool-chip"><span class="tool-icon">🔗</span> API REST — Integración de capas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11 – RESULTADOS -->
+  <div class="slide" id="slide-11">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <div class="slide-number">11 / PROYECCIONES</div>
+        <div class="slide-title">Resultados Esperados</div>
+        <div class="slide-rule"></div>
+      </div>
+      <div class="three-col" style="margin-bottom:20px;">
+        <div class="metric-card">
+          <div class="metric-value">&gt;60%</div>
+          <div class="metric-label">Reducción en tiempo<br>de registro vehicular</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">≈0</div>
+          <div class="metric-label">Errores de digitación<br>manual eliminados</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">∞</div>
+          <div class="metric-label">Escalabilidad a<br>múltiples sedes</div>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="problem-item"><div class="problem-dot dot-success"></div><div class="problem-text">Mayor seguridad en la identificación vehicular con doble validación</div></div>
+          <div class="problem-item"><div class="problem-dot dot-success"></div><div class="problem-text">Base de datos con trazabilidad completa de cada ingreso</div></div>
+        </div>
+        <div class="card">
+          <div class="problem-item"><div class="problem-dot dot-accent"></div><div class="problem-text">Sistema escalable y replicable a múltiples puntos de acceso</div></div>
+          <div class="problem-item"><div class="problem-dot dot-accent"></div><div class="problem-text">Analítica predictiva para optimización continua del servicio</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 12 – IMPACTO ODS -->
+  <div class="slide" id="slide-12">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <div class="slide-number">12 / SOSTENIBILIDAD</div>
+        <div class="slide-title">Impacto en los ODS</div>
+        <div class="slide-rule"></div>
+      </div>
+      <div class="two-col">
+        <div class="ods-card ods-9">
+          <div class="ods-number">9</div>
+          <div class="ods-tag tag-9">ODS 9 · Innovación</div>
+          <div class="ods-title" style="margin-bottom:14px;">Impacto Tecnológico</div>
+          <div class="problem-item"><div class="problem-dot" style="background:#ff7733; box-shadow:0 0 8px #ff7733"></div><div class="problem-text" style="font-size:0.85rem;">Digitalización completa del proceso de registro</div></div>
+          <div class="problem-item"><div class="problem-dot" style="background:#ff7733; box-shadow:0 0 8px #ff7733"></div><div class="problem-text" style="font-size:0.85rem;">Infraestructura tecnológica eficiente e interconectada</div></div>
+          <div class="problem-item"><div class="problem-dot" style="background:#ff7733; box-shadow:0 0 8px #ff7733"></div><div class="problem-text" style="font-size:0.85rem;">Innovación aplicada con RFID, ML e IoT</div></div>
+        </div>
+        <div class="ods-card ods-12">
+          <div class="ods-number">12</div>
+          <div class="ods-tag tag-12">ODS 12 · Responsabilidad</div>
+          <div class="ods-title" style="margin-bottom:14px;">Impacto Ambiental y Operativo</div>
+          <div class="problem-item"><div class="problem-dot" style="background:#ffbf00; box-shadow:0 0 8px #ffbf00"></div><div class="problem-text" style="font-size:0.85rem;">Optimización del uso de recursos humanos y materiales</div></div>
+          <div class="problem-item"><div class="problem-dot" style="background:#ffbf00; box-shadow:0 0 8px #ffbf00"></div><div class="problem-text" style="font-size:0.85rem;">Reducción significativa del consumo de papel</div></div>
+          <div class="problem-item"><div class="problem-dot" style="background:#ffbf00; box-shadow:0 0 8px #ffbf00"></div><div class="problem-text" style="font-size:0.85rem;">Disminución de congestión y tiempos improductivos</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 13 – CONCLUSIÓN -->
+  <div class="slide" id="slide-13">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="slide-header" style="text-align:center;">
+        <div class="slide-number" style="text-align:center;">13 / CIERRE</div>
+        <div class="slide-title">Conclusión</div>
+        <div class="slide-rule" style="margin:14px auto 0;"></div>
+      </div>
+      <div class="conclusion-big">SIT-RFID es una solución tecnológica <span style="-webkit-text-fill-color:var(--accent);">viable, escalable</span><br>y alineada con el desarrollo sostenible.</div>
+      <div style="display:flex; flex-wrap:wrap; justify-content:center; margin:20px 0;">
+        <span class="tech-pill pill-rfid">📡 Telecomunicaciones</span>
+        <span class="tech-pill pill-iot">🌐 IoT</span>
+        <span class="tech-pill pill-ml">🤖 Machine Learning</span>
+        <span class="tech-pill pill-auto">⚡ Automatización</span>
+        <span class="tech-pill pill-ops">📊 Optimización Operativa</span>
+      </div>
+      <div class="card" style="max-width:600px; margin:0 auto; text-align:left;">
+        <div class="card-label">Valor diferencial</div>
+        <div style="font-size:0.88rem; line-height:1.7; color:rgba(232,244,255,0.8);">
+          Al combinar <span class="kw">RFID + Visión Artificial + IoT</span> en un solo sistema con validación cruzada, SIT-RFID elimina las brechas que los sistemas aislados actuales no pueden resolver — entregando un flujo de atención vehicular <span class="kw3">inteligente, seguro y trazable</span>.
+        </div>
+      </div>
+      <div style="margin-top:24px; font-family:'Space Mono',monospace; font-size:0.65rem; color:var(--muted); letter-spacing:3px;">INGENIERÍA DE TELECOMUNICACIONES · PROYECTO INTEGRADOR · 2025</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- NAVIGATION -->
+<div id="nav">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>←</button>
+  <div id="progress-dots"></div>
+  <span id="slide-counter">01 / 13</span>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">→</button>
+</div>
+
+<script>
+  // Cursor + trail
+  const cursor = document.getElementById('cursor');
+  const trailContainer = document.getElementById('trail-container');
+  const TRAIL_LENGTH = 10;
+  const trail = [];
+
+  for (let i = 0; i < TRAIL_LENGTH; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'trail-dot';
+    trailContainer.appendChild(dot);
+    trail.push({ el: dot, x: 0, y: 0 });
+  }
+
+  let mouseX = 0, mouseY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+
+  function animateTrail() {
+    let x = mouseX, y = mouseY;
+    trail.forEach((dot, i) => {
+      const prev = i === 0 ? { x: mouseX, y: mouseY } : trail[i - 1];
+      dot.x += (prev.x - dot.x) * 0.4;
+      dot.y += (prev.y - dot.y) * 0.4;
+      dot.el.style.left = dot.x + 'px';
+      dot.el.style.top = dot.y + 'px';
+      const scale = 1 - i / TRAIL_LENGTH;
+      dot.el.style.opacity = (scale * 0.35).toFixed(2);
+      dot.el.style.transform = `translate(-50%,-50%) scale(${scale})`;
+    });
+    requestAnimationFrame(animateTrail);
+  }
+  animateTrail();
+
+  // Slides
+  let current = 1;
+  const total = 13;
+  const slides = Array.from(document.querySelectorAll('.slide'));
+
+  // Build dots
+  const dotsEl = document.getElementById('progress-dots');
+  for(let i = 1; i <= total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i===1?' active':'');
+    d.onclick = () => goTo(i);
+    d.style.cursor = 'none';
+    dotsEl.appendChild(d);
+  }
+
+  function updateDots() {
+    document.querySelectorAll('.dot').forEach((d,i) => {
+      d.classList.toggle('active', i+1 === current);
+    });
+  }
+
+  function goTo(n) {
+    if(n < 1 || n > total) return;
+    const prev = slides[current-1];
+    if(n > current) {
+      prev.classList.add('exit-left');
+    } else {
+      prev.style.transform = 'translateX(80px) scale(0.97)';
+      prev.style.opacity = '0';
+    }
+    prev.classList.remove('active');
+    setTimeout(() => {
+      prev.classList.remove('exit-left');
+      prev.style.transform = '';
+      prev.style.opacity = '';
+    }, 600);
+    current = n;
+    const next = slides[current-1];
+    next.classList.add('active');
+    document.getElementById('slide-counter').textContent =
+      String(current).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+    document.getElementById('prevBtn').disabled = current === 1;
+    document.getElementById('nextBtn').disabled = current === total;
+    updateDots();
+  }
+
+  function changeSlide(dir) { goTo(current + dir); }
+
+  document.addEventListener('keydown', e => {
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+    else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+    else if(e.key === 'Escape') goTo(1);
+  });
+
+  // Touch swipe
+  let touchX = 0;
+  document.addEventListener('touchstart', e => touchX = e.touches[0].clientX);
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchX;
+    if(Math.abs(dx) > 50) changeSlide(dx < 0 ? 1 : -1);
+  });
+</script>
+</body>
+</html>
