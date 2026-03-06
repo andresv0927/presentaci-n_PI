@@ -32,7 +32,6 @@
     cursor: none;
   }
 
-  /* Custom cursor */
   .cursor {
     position: fixed;
     width: 7px; height: 7px;
@@ -55,7 +54,6 @@
     transition: opacity 0.1s;
   }
 
-  /* Grid background */
   .grid-bg {
     position: fixed;
     inset: 0;
@@ -67,7 +65,6 @@
     z-index: 0;
   }
 
-  /* Ambient glow orbs */
   .orb {
     position: fixed;
     border-radius: 50%;
@@ -86,7 +83,6 @@
     50% { transform: translate(20px,-20px) scale(1.05); }
   }
 
-  /* Slides container */
   #slides-container {
     position: relative;
     width: 100vw;
@@ -122,7 +118,7 @@
     position: relative;
   }
 
-  /* ── SLIDE 1 – TÍTULO ── */
+  /* SLIDE 1 */
   .slide-title-hero {
     text-align: center;
     display: flex;
@@ -204,10 +200,8 @@
     background: linear-gradient(90deg, transparent, var(--accent), transparent);
   }
 
-  /* ── SLIDE HEADERS ── */
-  .slide-header {
-    margin-bottom: 40px;
-  }
+  /* SLIDE HEADERS */
+  .slide-header { margin-bottom: 40px; }
   .slide-number {
     font-family: 'Space Mono', monospace;
     font-size: 0.65rem;
@@ -235,7 +229,7 @@
     border-radius: 2px;
   }
 
-  /* ── CARDS ── */
+  /* CARDS */
   .card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -258,19 +252,21 @@
     box-shadow: 0 8px 40px rgba(0,212,255,0.08);
   }
 
-  /* ── GRID LAYOUTS ── */
+  /* GRID LAYOUTS */
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
   .grid-2-1 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; }
+  .full-layout { width: 100%; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: 100%; }
+  .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; width: 100%; }
 
-  /* ── PROBLEM LIST ── */
+  /* PROBLEM LIST */
   .problem-item {
     display: flex;
     align-items: flex-start;
     gap: 14px;
     padding: 12px 0;
     border-bottom: 1px solid rgba(255,255,255,0.04);
-    animation: slideInItem 0.5s ease both;
   }
   .problem-item:last-child { border-bottom: none; }
   .problem-dot {
@@ -285,16 +281,9 @@
   .dot-success { background: var(--success); box-shadow: 0 0 10px var(--success); }
   .dot-blue { background: var(--accent2); box-shadow: 0 0 10px var(--accent2); }
   .dot-purple { background: var(--accent3); box-shadow: 0 0 10px var(--accent3); }
-
   .problem-text { font-size: 0.9rem; line-height: 1.5; color: rgba(232,244,255,0.8); }
-  .problem-label { font-size: 0.7rem; font-family: 'Space Mono', monospace; color: var(--muted); margin-top: 2px; }
 
-  @keyframes slideInItem {
-    from { opacity: 0; transform: translateX(-15px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-
-  /* ── ODS CARDS ── */
+  /* ODS CARDS */
   .ods-card {
     padding: 28px;
     border-radius: 16px;
@@ -326,7 +315,7 @@
   .ods-title { font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 12px; }
   .ods-desc { font-size: 0.85rem; color: rgba(232,244,255,0.7); line-height: 1.6; }
 
-  /* ── OBJETIVO BOX ── */
+  /* OBJETIVO BOX */
   .obj-block {
     display: flex;
     gap: 20px;
@@ -347,45 +336,40 @@
   .obj-q-why { color: var(--success); }
   .obj-text { font-size: 0.92rem; line-height: 1.6; color: rgba(232,244,255,0.85); }
 
-  /* ── FLOW DIAGRAM ── */
-  .flow-container {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .flow-step {
+  /* FLOW DIAGRAM */
+  .arch-flow {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 0;
+    overflow-x: auto;
+    padding: 10px 0 20px;
+    scrollbar-width: none;
   }
-  .flow-dot {
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    font-weight: 700;
+  .arch-node {
     flex-shrink: 0;
+    text-align: center;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(10,22,40,0.9);
+    border: 1px solid var(--border);
+    min-width: 100px;
     position: relative;
-    z-index: 1;
+    transition: border-color 0.3s, box-shadow 0.3s, background 0.3s, transform 0.3s;
   }
-  .flow-dot-1 { background: rgba(0,212,255,0.2); border: 1.5px solid var(--accent); color: var(--accent); }
-  .flow-dot-2 { background: rgba(0,102,255,0.2); border: 1.5px solid var(--accent2); color: var(--accent2); }
-  .flow-dot-3 { background: rgba(123,47,255,0.2); border: 1.5px solid var(--accent3); color: var(--accent3); }
-  .flow-dot-4 { background: rgba(0,255,170,0.15); border: 1.5px solid var(--success); color: var(--success); }
-  .flow-dot-5 { background: rgba(255,60,110,0.15); border: 1.5px solid var(--danger); color: var(--danger); }
-  .flow-arrow {
-    width: 2px;
-    height: 14px;
-    background: linear-gradient(var(--accent), var(--accent2));
-    margin-left: 15px;
-    opacity: 0.4;
+  .arch-node-icon { font-size: 1.5rem; margin-bottom: 6px; }
+  .arch-node-label { font-size: 0.7rem; font-family: 'Space Mono', monospace; color: var(--muted); }
+  .arch-arrow {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 6px;
+    color: var(--accent);
+    font-size: 1.2rem;
+    opacity: 0.5;
+    transition: color 0.3s, opacity 0.3s;
   }
-  .flow-text { font-size: 0.88rem; color: rgba(232,244,255,0.8); }
 
-  /* ── TOOLS GRID ── */
+  /* TOOLS */
   .tool-chip {
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.08);
@@ -401,7 +385,7 @@
   .tool-chip:hover { background: rgba(0,212,255,0.08); border-color: var(--border); }
   .tool-icon { font-size: 1.1rem; }
 
-  /* ── METRICS ── */
+  /* METRICS */
   .metric-card {
     text-align: center;
     padding: 30px 20px;
@@ -431,7 +415,7 @@
   }
   .metric-label { font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
 
-  /* ── CONCLU ── */
+  /* CONCLUSION */
   .tech-pill {
     display: inline-flex;
     align-items: center;
@@ -448,7 +432,7 @@
   .pill-auto { background: rgba(0,255,170,0.1); border: 1px solid rgba(0,255,170,0.25); color: var(--success); }
   .pill-ops { background: rgba(255,60,110,0.1); border: 1px solid rgba(255,60,110,0.25); color: var(--danger); }
 
-  /* ── NAV ── */
+  /* NAV */
   #nav {
     position: fixed;
     bottom: 36px;
@@ -478,7 +462,7 @@
     transition: all 0.2s;
   }
   .nav-btn:hover { background: rgba(0,212,255,0.2); border-color: var(--accent); }
-  .nav-btn:disabled { opacity: 0.25; cursor: default; }
+  .nav-btn:disabled { opacity: 0.25; }
   #slide-counter {
     font-family: 'Space Mono', monospace;
     font-size: 0.72rem;
@@ -487,85 +471,18 @@
     min-width: 52px;
     text-align: center;
   }
-  #progress-dots {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-  }
+  #progress-dots { display: flex; gap: 5px; align-items: center; }
   .dot {
     width: 5px; height: 5px;
     border-radius: 50%;
     background: var(--muted);
     transition: all 0.3s;
     opacity: 0.4;
+    cursor: none;
   }
   .dot.active { background: var(--accent); opacity: 1; box-shadow: 0 0 8px var(--accent); width: 18px; border-radius: 3px; }
 
-  /* ── SLIDE-SPECIFIC LAYOUTS ── */
-  .full-layout { width: 100%; }
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: 100%; }
-  .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; width: 100%; }
-
-  /* Number accent */
-  .num-accent {
-    font-family: 'Orbitron', sans-serif;
-    color: var(--accent);
-    font-size: 0.8rem;
-    margin-right: 8px;
-    opacity: 0.7;
-  }
-
-  /* Section label inside card */
-  .card-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .card-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  /* Keyword highlight */
-  .kw { color: var(--accent); font-weight: 500; }
-  .kw2 { color: var(--accent3); font-weight: 500; }
-  .kw3 { color: var(--success); font-weight: 500; }
-
-  /* Keyboard hint */
-  #key-hint {
-    position: fixed;
-    top: 28px;
-    right: 40px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--muted);
-    letter-spacing: 2px;
-    opacity: 0.5;
-    z-index: 100;
-  }
-
-  /* Slide number indicator top-left */
-  #slide-indicator {
-    position: fixed;
-    top: 28px;
-    left: 40px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--accent);
-    letter-spacing: 3px;
-    z-index: 100;
-    opacity: 0.7;
-  }
-
-  /* step number boxes for metodologia */
+  /* STEP BOXES */
   .step-box {
     display: flex;
     gap: 16px;
@@ -588,77 +505,53 @@
   .step-content h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; }
   .step-content p { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
 
-  /* arch flow horizontal */
-  .arch-flow {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    overflow-x: auto;
-    padding: 10px 0 20px;
-    scrollbar-width: none;
-  }
-  .arch-node {
-    flex-shrink: 0;
-    text-align: center;
-    padding: 14px 16px;
-    border-radius: 12px;
-    background: rgba(10,22,40,0.9);
-    border: 1px solid var(--border);
-    min-width: 100px;
-    position: relative;
-  }
-  .arch-node-icon { font-size: 1.5rem; margin-bottom: 6px; }
-  .arch-node-label { font-size: 0.7rem; font-family: 'Space Mono', monospace; color: var(--muted); }
-  .arch-arrow {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    padding: 0 6px;
+  /* CARD LABEL */
+  .card-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
     color: var(--accent);
-    font-size: 1.2rem;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* KEYWORDS */
+  .kw { color: var(--accent); font-weight: 500; }
+  .kw2 { color: var(--accent3); font-weight: 500; }
+  .kw3 { color: var(--success); font-weight: 500; }
+
+  /* MISC */
+  #key-hint {
+    position: fixed;
+    top: 28px; right: 40px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 2px;
     opacity: 0.5;
+    z-index: 100;
   }
-
-  /* Ensure active slides animate children */
-  .slide.active .card,
-  .slide.active .step-box,
-  .slide.active .ods-card,
-  .slide.active .obj-block,
-  .slide.active .metric-card,
-  .slide.active .tool-chip,
-  .slide.active .arch-node {
-    animation: fadeUp 0.5s ease both;
+  #slide-indicator {
+    position: fixed;
+    top: 28px; left: 40px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 3px;
+    z-index: 100;
+    opacity: 0.7;
   }
-  .slide.active .card:nth-child(2),
-  .slide.active .step-box:nth-child(2),
-  .slide.active .ods-card:nth-child(2) { animation-delay: 0.07s; }
-  .slide.active .card:nth-child(3),
-  .slide.active .step-box:nth-child(3) { animation-delay: 0.14s; }
-  .slide.active .card:nth-child(4),
-  .slide.active .step-box:nth-child(4) { animation-delay: 0.21s; }
-  .slide.active .card:nth-child(5) { animation-delay: 0.28s; }
-  .slide.active .card:nth-child(6) { animation-delay: 0.35s; }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Scanline overlay */
   .scanline {
     position: fixed;
     inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0,0,0,0.03) 2px,
-      rgba(0,0,0,0.03) 4px
-    );
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
     pointer-events: none;
     z-index: 50;
   }
-
   .conclusion-big {
     font-family: 'Orbitron', sans-serif;
     font-size: clamp(1rem, 2vw, 1.4rem);
@@ -672,11 +565,36 @@
     margin: 20px 0;
   }
 
-  .highlighted-stat {
-    display: inline-block;
-    font-family: 'Orbitron', monospace;
-    color: var(--success);
-    font-size: 1.1rem;
+  /* LAYER INTERACTIONS */
+  .arch-node.lit-accent  { border-color: var(--accent)  !important; background: rgba(0,212,255,0.15)  !important; box-shadow: 0 0 18px rgba(0,212,255,0.35)  !important; transform: scale(1.07); }
+  .arch-node.lit-accent3 { border-color: var(--accent3) !important; background: rgba(123,47,255,0.15) !important; box-shadow: 0 0 18px rgba(123,47,255,0.4)  !important; transform: scale(1.07); }
+  .arch-node.lit-success { border-color: var(--success) !important; background: rgba(0,255,170,0.12)  !important; box-shadow: 0 0 18px rgba(0,255,170,0.35)  !important; transform: scale(1.07); }
+  .arch-node.dimmed { opacity: 0.3; transform: scale(0.97); }
+  .arch-arrow.lit-accent  { color: var(--accent);  opacity: 1 !important; }
+  .arch-arrow.lit-accent3 { color: var(--accent3); opacity: 1 !important; }
+  .arch-arrow.lit-success { color: var(--success); opacity: 1 !important; }
+  .arch-arrow.dimmed { opacity: 0.1; }
+  .layer-card.lit-accent  { border-color: rgba(0,212,255,0.6)  !important; box-shadow: 0 0 30px rgba(0,212,255,0.15)  !important; background: rgba(0,212,255,0.06)  !important; }
+  .layer-card.lit-accent3 { border-color: rgba(123,47,255,0.6) !important; box-shadow: 0 0 30px rgba(123,47,255,0.15) !important; background: rgba(123,47,255,0.06) !important; }
+  .layer-card.lit-success { border-color: rgba(0,255,170,0.6)  !important; box-shadow: 0 0 30px rgba(0,255,170,0.12)  !important; background: rgba(0,255,170,0.05)  !important; }
+  .layer-card.dimmed { opacity: 0.35; }
+
+  /* ANIMATIONS */
+  .slide.active .card,
+  .slide.active .step-box,
+  .slide.active .ods-card,
+  .slide.active .obj-block,
+  .slide.active .metric-card,
+  .slide.active .tool-chip,
+  .slide.active .arch-node { animation: fadeUp 0.5s ease both; }
+  .slide.active .card:nth-child(2), .slide.active .step-box:nth-child(2), .slide.active .ods-card:nth-child(2) { animation-delay: 0.07s; }
+  .slide.active .card:nth-child(3), .slide.active .step-box:nth-child(3) { animation-delay: 0.14s; }
+  .slide.active .card:nth-child(4), .slide.active .step-box:nth-child(4) { animation-delay: 0.21s; }
+  .slide.active .card:nth-child(5) { animation-delay: 0.28s; }
+  .slide.active .card:nth-child(6) { animation-delay: 0.35s; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 </style>
 </head>
@@ -703,45 +621,135 @@
         <div class="hero-title">SIT-RFID</div>
         <div class="hero-line"></div>
         <div class="hero-subtitle">Sistema Inteligente de Gestión de Turnos Vehiculares<br>Basado en RFID, Visión Artificial e IoT</div>
+        <div style="font-family:'Space Mono',monospace; font-size:0.75rem; color:rgba(0,212,255,0.6); letter-spacing:3px; text-transform:uppercase;">
+          Andrés Felipe Villamizar Ocampo
+        </div>
+        <div style="font-family:'Space Mono',monospace; font-size:0.75rem; color:rgba(0,212,255,0.6); letter-spacing:3px; text-transform:uppercase;">
+          Yuly Andrea Alvarez Pizarro
+        </div>
         <div class="hero-tags">
           <span class="hero-tag tag-rfid">📡 RFID UHF</span>
           <span class="hero-tag tag-cv">👁 Machine Learning</span>
           <span class="hero-tag tag-iot">🌐 IoT Architecture</span>
         </div>
-        <div class="hero-uni">Ingeniería de Telecomunicaciones — 2025</div>
+        <div class="hero-uni">Ingeniería de Telecomunicaciones — 2026</div>
       </div>
     </div>
   </div>
 
   <!-- SLIDE 2 – PROBLEMÁTICA -->
   <div class="slide" id="slide-2">
-    <div class="slide-inner">
-      <div class="slide-header">
-        <div class="slide-number">02 / CONTEXTO</div>
+    <div class="slide-inner" style="max-width:1200px;">
+      <div class="slide-header" style="margin-bottom:18px;">
+        <div class="slide-number">02 / DIAGNÓSTICO</div>
         <div class="slide-title">Problemática</div>
         <div class="slide-rule"></div>
       </div>
-      <div class="two-col">
-        <div class="card">
-          <div class="card-label">Causas identificadas</div>
-          <div class="problem-item"><div class="problem-dot dot-danger"></div><div><div class="problem-text">Registro manual de ingreso vehicular</div></div></div>
-          <div class="problem-item"><div class="problem-dot dot-danger"></div><div><div class="problem-text">Errores humanos en digitación de datos</div></div></div>
-          <div class="problem-item"><div class="problem-dot dot-warn"></div><div><div class="problem-text">Largos tiempos de espera en cola</div></div></div>
-          <div class="problem-item"><div class="problem-dot dot-warn"></div><div><div class="problem-text">Mala asignación de técnicos disponibles</div></div></div>
-          <div class="problem-item"><div class="problem-dot dot-warn"></div><div><div class="problem-text">Falta de trazabilidad en tiempo real</div></div></div>
-          <div class="problem-item"><div class="problem-dot dot-muted"></div><div><div class="problem-text">Ausencia de analítica predictiva</div></div></div>
+
+      <!-- DIAGNÓSTICO CENTRAL — caja destacada -->
+      <div style="background:linear-gradient(135deg,rgba(255,60,110,0.1),rgba(255,100,50,0.06));border:1px solid rgba(255,60,110,0.35);border-radius:16px;padding:16px 24px;margin-bottom:18px;display:flex;align-items:center;gap:18px;">
+        <div style="font-size:2rem;flex-shrink:0;">🔍</div>
+        <div>
+          <div style="font-family:'Space Mono',monospace;font-size:0.58rem;letter-spacing:3px;color:var(--danger);margin-bottom:5px;">DIAGNÓSTICO</div>
+          <div style="font-size:0.92rem;color:rgba(232,244,255,0.92);line-height:1.6;">En el parqueadero institucional, el <strong style="color:white;">proceso de ingreso vehicular es completamente manual</strong>: un operario registra a mano cada vehículo, asigna turno sin información del estado real del servicio y no existe trazabilidad del tiempo de atención, generando <strong style="color:var(--danger);">cuellos de botella, errores recurrentes e insatisfacción</strong> en usuarios y personal.</div>
         </div>
-        <div class="card">
-          <div class="card-label">Consecuencias</div>
-          <div class="problem-item"><div class="problem-dot dot-danger"></div><div><div class="problem-text"><strong>Ineficiencia operativa</strong> en todo el flujo de atención</div></div></div>
-          <div class="problem-item"><div class="problem-dot dot-danger"></div><div><div class="problem-text"><strong>Pérdida de tiempo</strong> para clientes y técnicos</div></div></div>
-          <div class="problem-item"><div class="problem-dot dot-warn"></div><div><div class="problem-text"><strong>Mayor consumo</strong> de recursos humanos y materiales</div></div></div>
-          <div class="problem-item"><div class="problem-dot dot-danger"></div><div><div class="problem-text"><strong>Insatisfacción del cliente</strong> por esperas y errores</div></div></div>
-          <div style="margin-top:20px; padding:14px; border-radius:10px; background: rgba(255,60,110,0.07); border: 1px solid rgba(255,60,110,0.2);">
-            <div style="font-size:0.75rem; font-family:'Space Mono',monospace; color:var(--danger); margin-bottom:6px;">→ Diagnóstico</div>
-            <div style="font-size:0.82rem; color:rgba(232,244,255,0.7);">Los sistemas actuales operan de forma <span class="kw">aislada</span> sin integración multisensorial ni inteligencia operativa.</div>
+      </div>
+
+      <!-- COMPARACIÓN: ACTUAL vs IDEAL -->
+      <div style="display:grid;grid-template-columns:1fr 56px 1fr;gap:0;align-items:stretch;">
+
+        <!-- SITUACIÓN ACTUAL -->
+        <div style="background:rgba(255,60,110,0.05);border:1px solid rgba(255,60,110,0.2);border-radius:16px 0 0 16px;padding:20px 22px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:var(--danger);box-shadow:0 0 10px var(--danger);flex-shrink:0;"></div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:0.68rem;font-weight:700;color:var(--danger);letter-spacing:2px;">SITUACIÓN ACTUAL</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border-radius:10px;background:rgba(255,60,110,0.07);border:1px solid rgba(255,60,110,0.15);">
+              <span style="font-size:1.1rem;flex-shrink:0;margin-top:1px;">📋</span>
+              <div>
+                <div style="font-size:0.78rem;font-weight:600;color:rgba(232,244,255,0.9);margin-bottom:2px;">Registro manual en planilla</div>
+                <div style="font-size:0.72rem;color:var(--muted);line-height:1.4;">El operario anota a mano placa, hora y datos del vehículo en cada ingreso</div>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border-radius:10px;background:rgba(255,60,110,0.07);border:1px solid rgba(255,60,110,0.15);">
+              <span style="font-size:1.1rem;flex-shrink:0;margin-top:1px;">⏳</span>
+              <div>
+                <div style="font-size:0.78rem;font-weight:600;color:rgba(232,244,255,0.9);margin-bottom:2px;">Tiempos de espera elevados</div>
+                <div style="font-size:0.72rem;color:var(--muted);line-height:1.4;">Colas en horas pico por proceso de registro lento y sin priorización</div>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border-radius:10px;background:rgba(255,60,110,0.07);border:1px solid rgba(255,60,110,0.15);">
+              <span style="font-size:1.1rem;flex-shrink:0;margin-top:1px;">❌</span>
+              <div>
+                <div style="font-size:0.78rem;font-weight:600;color:rgba(232,244,255,0.9);margin-bottom:2px;">Errores de digitación frecuentes</div>
+                <div style="font-size:0.72rem;color:var(--muted);line-height:1.4;">Placas mal transcritas dificultan la trazabilidad y auditoría posterior</div>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border-radius:10px;background:rgba(255,60,110,0.07);border:1px solid rgba(255,60,110,0.15);">
+              <span style="font-size:1.1rem;flex-shrink:0;margin-top:1px;">🔀</span>
+              <div>
+                <div style="font-size:0.78rem;font-weight:600;color:rgba(232,244,255,0.9);margin-bottom:2px;">Asignación de turno sin datos</div>
+                <div style="font-size:0.72rem;color:var(--muted);line-height:1.4;">Sin visibilidad del estado de técnicos ni del flujo real de atención</div>
+              </div>
+            </div>
+
           </div>
         </div>
+
+        <!-- FLECHA CENTRAL -->
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,0.02);border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);">
+          <div style="font-size:1.4rem;color:rgba(255,255,255,0.15);">→</div>
+          <div style="font-family:'Space Mono',monospace;font-size:0.48rem;color:rgba(255,255,255,0.15);letter-spacing:1px;margin-top:6px;writing-mode:vertical-rl;text-orientation:mixed;">SIT-RFID</div>
+        </div>
+
+        <!-- SITUACIÓN IDEAL -->
+        <div style="background:rgba(0,255,170,0.04);border:1px solid rgba(0,255,170,0.2);border-radius:0 16px 16px 0;padding:20px 22px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:var(--success);box-shadow:0 0 10px var(--success);flex-shrink:0;"></div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:0.68rem;font-weight:700;color:var(--success);letter-spacing:2px;">CON SIT-RFID</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border-radius:10px;background:rgba(0,255,170,0.06);border:1px solid rgba(0,255,170,0.15);">
+              <span style="font-size:1.1rem;flex-shrink:0;margin-top:1px;">📡</span>
+              <div>
+                <div style="font-size:0.78rem;font-weight:600;color:rgba(232,244,255,0.9);margin-bottom:2px;">Registro automático RFID + cámara</div>
+                <div style="font-size:0.72rem;color:var(--muted);line-height:1.4;">Identificación dual en menos de 2 segundos, sin intervención humana</div>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border-radius:10px;background:rgba(0,255,170,0.06);border:1px solid rgba(0,255,170,0.15);">
+              <span style="font-size:1.1rem;flex-shrink:0;margin-top:1px;">⚡</span>
+              <div>
+                <div style="font-size:0.78rem;font-weight:600;color:rgba(232,244,255,0.9);margin-bottom:2px;">Flujo continuo sin colas</div>
+                <div style="font-size:0.72rem;color:var(--muted);line-height:1.4;">Barrera automatizada y turno asignado antes de que el vehículo detenga</div>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border-radius:10px;background:rgba(0,255,170,0.06);border:1px solid rgba(0,255,170,0.15);">
+              <span style="font-size:1.1rem;flex-shrink:0;margin-top:1px;">✅</span>
+              <div>
+                <div style="font-size:0.78rem;font-weight:600;color:rgba(232,244,255,0.9);margin-bottom:2px;">Validación cruzada con ML</div>
+                <div style="font-size:0.72rem;color:var(--muted);line-height:1.4;">OCR verifica la placa contra el tag RFID eliminando errores de identidad</div>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border-radius:10px;background:rgba(0,255,170,0.06);border:1px solid rgba(0,255,170,0.15);">
+              <span style="font-size:1.1rem;flex-shrink:0;margin-top:1px;">📊</span>
+              <div>
+                <div style="font-size:0.78rem;font-weight:600;color:rgba(232,244,255,0.9);margin-bottom:2px;">Turno inteligente en tiempo real</div>
+                <div style="font-size:0.72rem;color:var(--muted);line-height:1.4;">Motor IoT asigna según disponibilidad real de técnicos y tipo de servicio</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -790,27 +798,68 @@
         <div class="slide-title">Objetivo General</div>
         <div class="slide-rule"></div>
       </div>
-      <div class="obj-block obj-what">
-        <div class="obj-icon">🎯</div>
-        <div>
-          <div class="obj-q obj-q-what">¿Qué?</div>
-          <div class="obj-text">Diseñar un <span class="kw">sistema inteligente</span> para la gestión automatizada de turnos vehiculares en centros de servicio y concesionarios.</div>
+
+      <!-- LEYENDA DE CHIPS -->
+      <div style="display:flex; gap:12px; margin-bottom:28px; flex-wrap:wrap;">
+        <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 16px; border-radius:999px; background:rgba(0,212,255,0.08); border:1px solid rgba(0,212,255,0.35);">
+          <div style="width:7px; height:7px; border-radius:50%; background:var(--accent); box-shadow:0 0 8px var(--accent);"></div>
+          <span style="font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:2px; color:var(--accent); text-transform:uppercase;">🎯 ¿Qué?</span>
+        </div>
+        <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 16px; border-radius:999px; background:rgba(123,47,255,0.1); border:1px solid rgba(123,47,255,0.4);">
+          <div style="width:7px; height:7px; border-radius:50%; background:var(--accent3); box-shadow:0 0 8px var(--accent3);"></div>
+          <span style="font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:2px; color:var(--accent3); text-transform:uppercase;">⚙️ ¿Cómo?</span>
+        </div>
+        <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 16px; border-radius:999px; background:rgba(0,255,170,0.07); border:1px solid rgba(0,255,170,0.35);">
+          <div style="width:7px; height:7px; border-radius:50%; background:var(--success); box-shadow:0 0 8px var(--success);"></div>
+          <span style="font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:2px; color:var(--success); text-transform:uppercase;">🚀 ¿Para qué?</span>
         </div>
       </div>
-      <div class="obj-block obj-how">
-        <div class="obj-icon">⚙️</div>
-        <div>
-          <div class="obj-q obj-q-how">¿Cómo?</div>
-          <div class="obj-text">Integrando tecnología <span class="kw2">RFID</span>, reconocimiento de placas con <span class="kw2">Machine Learning</span> y arquitectura <span class="kw2">IoT</span> distribuida.</div>
-        </div>
+
+      <!-- PÁRRAFO UNIFICADO -->
+      <div style="
+        background: rgba(10,22,40,0.9);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 20px;
+        padding: 44px 52px;
+        backdrop-filter: blur(16px);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+        position: relative;
+        overflow: hidden;
+      ">
+        <!-- fondo glow decorativo -->
+        <div style="position:absolute; top:-60px; left:-60px; width:300px; height:300px; background:radial-gradient(circle, rgba(0,212,255,0.05), transparent 70%); pointer-events:none;"></div>
+        <div style="position:absolute; bottom:-60px; right:-40px; width:280px; height:280px; background:radial-gradient(circle, rgba(123,47,255,0.06), transparent 70%); pointer-events:none;"></div>
+
+        <p style="
+          font-size: clamp(1rem, 1.6vw, 1.25rem);
+          line-height: 2.1;
+          color: rgba(232,244,255,0.75);
+          font-weight: 300;
+          position: relative;
+          z-index: 1;
+        ">
+          Diseñar un
+          <span style="color:var(--accent); font-weight:600; text-shadow:0 0 18px rgba(0,212,255,0.45);">sistema inteligente</span>
+          para la
+          <span style="color:var(--accent); font-weight:600; text-shadow:0 0 18px rgba(0,212,255,0.45);">gestión automatizada de turnos vehiculares</span>
+          en centros de servicio y concesionarios,
+          integrando tecnología
+          <span style="color:var(--accent3); font-weight:600; text-shadow:0 0 18px rgba(123,47,255,0.5);">RFID</span>,
+          reconocimiento de placas con
+          <span style="color:var(--accent3); font-weight:600; text-shadow:0 0 18px rgba(123,47,255,0.5);">Machine Learning</span>
+          y arquitectura
+          <span style="color:var(--accent3); font-weight:600; text-shadow:0 0 18px rgba(123,47,255,0.5);">IoT</span>
+          distribuida,
+          con el fin de
+          <span style="color:var(--success); font-weight:600; text-shadow:0 0 18px rgba(0,255,170,0.4);">optimizar los tiempos de atención</span>,
+          mejorar la
+          <span style="color:var(--success); font-weight:600; text-shadow:0 0 18px rgba(0,255,170,0.4);">seguridad</span>
+          y aumentar la
+          <span style="color:var(--success); font-weight:600; text-shadow:0 0 18px rgba(0,255,170,0.4);">eficiencia operativa</span>
+          en concesionarios automotrices.
+        </p>
       </div>
-      <div class="obj-block obj-why">
-        <div class="obj-icon">🚀</div>
-        <div>
-          <div class="obj-q obj-q-why">¿Para qué?</div>
-          <div class="obj-text">Para <span class="kw3">optimizar tiempos de atención</span>, mejorar la seguridad y aumentar la eficiencia operativa en concesionarios automotrices.</div>
-        </div>
-      </div>
+
     </div>
   </div>
 
@@ -823,36 +872,61 @@
         <div class="slide-rule"></div>
       </div>
       <div class="three-col">
-        <div class="card">
-          <div style="font-size:1.8rem; margin-bottom:12px;">📡</div>
-          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent); letter-spacing:2px; margin-bottom:8px;">OBJ 01</div>
-          <div style="font-size:0.88rem; line-height:1.5; color:rgba(232,244,255,0.8);">Implementar identificación vehicular mediante <span class="kw">RFID UHF</span> de alta precisión</div>
+
+        <!-- OBJ 1 – IMPLEMENTAR -->
+        <div class="card" style="border-left: 3px solid var(--accent); padding: 28px 24px;">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+            <div style="font-size:1.8rem; filter:drop-shadow(0 0 10px rgba(0,212,255,0.5));">📡</div>
+            <div>
+              <div style="font-family:'Orbitron',sans-serif; font-size:0.62rem; color:var(--accent); letter-spacing:3px; opacity:0.7;">OBJ 01</div>
+              <div style="font-family:'Orbitron',sans-serif; font-size:0.78rem; font-weight:700; color:var(--accent);">Implementar</div>
+            </div>
+          </div>
+          <div style="font-size:0.88rem; line-height:1.65; color:rgba(232,244,255,0.8);">
+            El sistema de identificación vehicular mediante <span class="kw">RFID UHF</span> y la <span class="kw">validación cruzada</span> con reconocimiento de placas, garantizando autenticación híbrida de doble factor en el acceso.
+          </div>
+          <div style="margin-top:14px; display:flex; gap:6px; flex-wrap:wrap;">
+            <span style="font-size:0.68rem; padding:3px 10px; border-radius:4px; background:rgba(0,212,255,0.1); color:var(--accent); border:1px solid rgba(0,212,255,0.2);">RFID UHF</span>
+            <span style="font-size:0.68rem; padding:3px 10px; border-radius:4px; background:rgba(0,212,255,0.1); color:var(--accent); border:1px solid rgba(0,212,255,0.2);">Validación cruzada</span>
+          </div>
         </div>
-        <div class="card">
-          <div style="font-size:1.8rem; margin-bottom:12px;">👁️</div>
-          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent); letter-spacing:2px; margin-bottom:8px;">OBJ 02</div>
-          <div style="font-size:0.88rem; line-height:1.5; color:rgba(232,244,255,0.8);">Desarrollar reconocimiento automático de <span class="kw">placas vehiculares</span> con ML</div>
+
+        <!-- OBJ 2 – DESARROLLAR -->
+        <div class="card" style="border-left: 3px solid var(--accent3); padding: 28px 24px;">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+            <div style="font-size:1.8rem; filter:drop-shadow(0 0 10px rgba(123,47,255,0.5));">🤖</div>
+            <div>
+              <div style="font-family:'Orbitron',sans-serif; font-size:0.62rem; color:var(--accent3); letter-spacing:3px; opacity:0.7;">OBJ 02</div>
+              <div style="font-family:'Orbitron',sans-serif; font-size:0.78rem; font-weight:700; color:var(--accent3);">Desarrollar</div>
+            </div>
+          </div>
+          <div style="font-size:0.88rem; line-height:1.65; color:rgba(232,244,255,0.8);">
+            El módulo de <span class="kw2">reconocimiento de placas</span> con Machine Learning y el <span class="kw2">algoritmo inteligente</span> de asignación de turnos, optimizando la distribución de atención en tiempo real.
+          </div>
+          <div style="margin-top:14px; display:flex; gap:6px; flex-wrap:wrap;">
+            <span style="font-size:0.68rem; padding:3px 10px; border-radius:4px; background:rgba(123,47,255,0.1); color:var(--accent3); border:1px solid rgba(123,47,255,0.2);">Machine Learning</span>
+            <span style="font-size:0.68rem; padding:3px 10px; border-radius:4px; background:rgba(123,47,255,0.1); color:var(--accent3); border:1px solid rgba(123,47,255,0.2);">Asignación de turnos</span>
+          </div>
         </div>
-        <div class="card">
-          <div style="font-size:1.8rem; margin-bottom:12px;">🗄️</div>
-          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent); letter-spacing:2px; margin-bottom:8px;">OBJ 03</div>
-          <div style="font-size:0.88rem; line-height:1.5; color:rgba(232,244,255,0.8);">Diseñar un <span class="kw">backend</span> para almacenamiento y gestión de datos en tiempo real</div>
+
+        <!-- OBJ 3 – DISEÑAR -->
+        <div class="card" style="border-left: 3px solid var(--success); padding: 28px 24px;">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+            <div style="font-size:1.8rem; filter:drop-shadow(0 0 10px rgba(0,255,170,0.4));">🗄️</div>
+            <div>
+              <div style="font-family:'Orbitron',sans-serif; font-size:0.62rem; color:var(--success); letter-spacing:3px; opacity:0.7;">OBJ 03</div>
+              <div style="font-family:'Orbitron',sans-serif; font-size:0.78rem; font-weight:700; color:var(--success);">Diseñar</div>
+            </div>
+          </div>
+          <div style="font-size:0.88rem; line-height:1.65; color:rgba(232,244,255,0.8);">
+            La arquitectura <span class="kw3">backend IoT</span> con base de datos, API REST y protocolo MQTT, que genere <span class="kw3">métricas en tiempo real</span> para la trazabilidad completa y análisis operativo del servicio.
+          </div>
+          <div style="margin-top:14px; display:flex; gap:6px; flex-wrap:wrap;">
+            <span style="font-size:0.68rem; padding:3px 10px; border-radius:4px; background:rgba(0,255,170,0.08); color:var(--success); border:1px solid rgba(0,255,170,0.2);">Backend IoT</span>
+            <span style="font-size:0.68rem; padding:3px 10px; border-radius:4px; background:rgba(0,255,170,0.08); color:var(--success); border:1px solid rgba(0,255,170,0.2);">Métricas en tiempo real</span>
+          </div>
         </div>
-        <div class="card">
-          <div style="font-size:1.8rem; margin-bottom:12px;">🔐</div>
-          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent); letter-spacing:2px; margin-bottom:8px;">OBJ 04</div>
-          <div style="font-size:0.88rem; line-height:1.5; color:rgba(232,244,255,0.8);">Implementar <span class="kw">validación cruzada</span> RFID + reconocimiento de placa</div>
-        </div>
-        <div class="card">
-          <div style="font-size:1.8rem; margin-bottom:12px;">🤖</div>
-          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent); letter-spacing:2px; margin-bottom:8px;">OBJ 05</div>
-          <div style="font-size:0.88rem; line-height:1.5; color:rgba(232,244,255,0.8);">Desarrollar algoritmo inteligente de <span class="kw">asignación de turnos</span> optimizada</div>
-        </div>
-        <div class="card">
-          <div style="font-size:1.8rem; margin-bottom:12px;">📊</div>
-          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent); letter-spacing:2px; margin-bottom:8px;">OBJ 06</div>
-          <div style="font-size:0.88rem; line-height:1.5; color:rgba(232,244,255,0.8);">Generar <span class="kw">métricas en tiempo real</span> para análisis operativo y toma de decisiones</div>
-        </div>
+
       </div>
     </div>
   </div>
@@ -901,236 +975,622 @@
         <div class="slide-title">Estado del Arte</div>
         <div class="slide-rule"></div>
       </div>
-      <div style="display:grid; grid-template-columns:1fr 1fr 1.1fr; gap:18px;">
-        <div class="card">
-          <div class="card-label">Tecnologías existentes</div>
-          <div class="problem-item"><div class="problem-dot dot-blue"></div><div class="problem-text">Sistemas LPR (License Plate Recognition)</div></div>
-          <div class="problem-item"><div class="problem-dot dot-blue"></div><div class="problem-text">Sistemas RFID industriales</div></div>
-          <div class="problem-item"><div class="problem-dot dot-blue"></div><div class="problem-text">Software de gestión de turnos</div></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:16px;">
+
+        <!-- Referencia principal del artículo -->
+        <div class="card" style="border-left:3px solid var(--accent3); background:linear-gradient(135deg,rgba(123,47,255,0.07),transparent);">
+          <div class="card-label" style="color:var(--accent3);">📄 Referencia clave</div>
+          <div style="font-size:0.78rem; font-family:'Space Mono',monospace; color:var(--accent3); margin-bottom:10px;">Palmera et al., RCTA 2024</div>
+          <div style="font-size:0.86rem; line-height:1.65; color:rgba(232,244,255,0.82);">
+            Desarrollaron un sistema de reconocimiento de patrones en placas vehiculares usando <span class="kw2">Machine Learning</span> (OpenCV + Tesseract OCR) con arquitectura de <span class="kw2">microservicios</span>, demostrando identificación precisa bajo diversas condiciones de imagen en la Universidad Popular del Cesar.
+          </div>
+          <div style="margin-top:12px; padding:10px 14px; border-radius:8px; background:rgba(123,47,255,0.08); border:1px solid rgba(123,47,255,0.2);">
+            <div style="font-size:0.72rem; color:var(--muted); line-height:1.5;">
+              <span style="color:var(--accent3);">Metodología:</span> Scrum (sprints) · Python · OpenCV · Tesseract · PostgreSQL
+            </div>
+          </div>
         </div>
-        <div class="card">
-          <div class="card-label">Limitaciones actuales</div>
-          <div class="problem-item"><div class="problem-dot dot-danger"></div><div class="problem-text">Operan de forma <strong>aislada</strong></div></div>
-          <div class="problem-item"><div class="problem-dot dot-danger"></div><div class="problem-text">Sin autenticación <strong>híbrida</strong></div></div>
-          <div class="problem-item"><div class="problem-dot dot-danger"></div><div class="problem-text">Sin optimización <strong>predictiva</strong></div></div>
+
+        <!-- Limitaciones y brecha -->
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div class="card" style="border-left:3px solid var(--danger);">
+            <div class="card-label" style="color:var(--danger);">⚠ Brecha identificada</div>
+            <div class="problem-item"><div class="problem-dot dot-danger"></div><div class="problem-text" style="font-size:0.84rem;">Sistemas LPR y RFID operan de forma <strong>aislada</strong>, sin integración multisensorial</div></div>
+            <div class="problem-item"><div class="problem-dot dot-danger"></div><div class="problem-text" style="font-size:0.84rem;">Ningún sistema existente combina <strong>validación cruzada</strong> RFID + visión artificial</div></div>
+            <div class="problem-item"><div class="problem-dot dot-warn"></div><div class="problem-text" style="font-size:0.84rem;">Costos elevados de soluciones comerciales impiden su adopción</div></div>
+          </div>
+          <div class="card" style="background:linear-gradient(135deg,rgba(0,212,255,0.08),rgba(0,102,255,0.05)); border-color:rgba(0,212,255,0.28);">
+            <div class="card-label" style="color:var(--success);">↗ Aporte de SIT-RFID</div>
+            <div style="font-size:0.86rem; line-height:1.6; color:rgba(232,244,255,0.85);">
+              Sistema <span class="kw">multisensorial</span> con <span class="kw3">doble validación</span> RFID + ML e <span class="kw">IoT integrado</span> — extendiendo el trabajo de Palmera et al. hacia la gestión automática de turnos vehiculares.
+            </div>
+          </div>
         </div>
-        <div class="card" style="background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(0,102,255,0.06)); border-color: rgba(0,212,255,0.25);">
-          <div class="card-label" style="color:var(--success);">↗ Propuesta innovadora</div>
-          <div style="font-size:1.5rem; margin-bottom:12px; text-align:center;">⚡</div>
-          <div style="font-size:0.88rem; line-height:1.65; color:rgba(232,244,255,0.85);">Sistema <span class="kw">multisensorial</span> con <span class="kw3">validación cruzada</span> RFID + Visión Artificial y análisis inteligente integrado — primera propuesta de este tipo para gestión vehicular.</div>
-        </div>
+
       </div>
     </div>
   </div>
 
   <!-- SLIDE 8 – METODOLOGÍA -->
   <div class="slide" id="slide-8">
-    <div class="slide-inner">
-      <div class="slide-header">
+    <div class="slide-inner" style="max-width:1200px;">
+      <div class="slide-header" style="margin-bottom:16px;">
         <div class="slide-number">08 / PROCESO</div>
         <div class="slide-title">Metodología</div>
         <div class="slide-rule"></div>
       </div>
-      <div>
-        <div class="step-box">
-          <div class="step-num" style="color:var(--accent);">01</div>
-          <div class="step-content">
-            <h4>Diseño del Sistema</h4>
-            <p>Arquitectura IoT distribuida — definición de capas, protocolos y flujos de datos entre sensores, backend y usuarios.</p>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center; height:420px;">
+
+        <!-- ── RUEDA GRANDE ── -->
+        <div style="display:flex; align-items:center; justify-content:center; height:100%;">
+          <svg width="380" height="380" viewBox="0 0 400 400" style="overflow:visible; filter:drop-shadow(0 0 40px rgba(0,212,255,0.08));">
+            <defs>
+              <marker id="am1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="rgba(0,212,255,0.6)"/></marker>
+              <marker id="am2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="rgba(0,102,255,0.6)"/></marker>
+              <marker id="am3" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="rgba(123,47,255,0.6)"/></marker>
+              <marker id="am4" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="rgba(0,255,170,0.6)"/></marker>
+              <radialGradient id="rg1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="rgba(0,212,255,0.18)"/><stop offset="100%" stop-color="rgba(0,212,255,0.04)"/></radialGradient>
+              <radialGradient id="rg2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="rgba(0,102,255,0.18)"/><stop offset="100%" stop-color="rgba(0,102,255,0.04)"/></radialGradient>
+              <radialGradient id="rg3" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="rgba(123,47,255,0.18)"/><stop offset="100%" stop-color="rgba(123,47,255,0.04)"/></radialGradient>
+              <radialGradient id="rg4" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="rgba(0,255,170,0.14)"/><stop offset="100%" stop-color="rgba(0,255,170,0.03)"/></radialGradient>
+            </defs>
+
+            <!-- Anillos decorativos -->
+            <circle cx="200" cy="200" r="185" fill="none" stroke="rgba(0,212,255,0.05)" stroke-width="1" stroke-dasharray="3 8"/>
+            <circle cx="200" cy="200" r="160" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+
+            <!-- Cuadrantes grandes (radio 150) -->
+            <!-- Q1 arriba-derecha: Diseño -->
+            <path id="arc1" data-phase="1"
+              d="M200,200 L200,50 A150,150 0 0,1 350,200 Z"
+              fill="rgba(0,212,255,0.07)" stroke="rgba(0,212,255,0.3)" stroke-width="1.5"
+              style="cursor:none; transition:all 0.35s;"/>
+            <!-- Q2 abajo-derecha: Implementación -->
+            <path id="arc2" data-phase="2"
+              d="M200,200 L350,200 A150,150 0 0,1 200,350 Z"
+              fill="rgba(0,102,255,0.07)" stroke="rgba(0,102,255,0.3)" stroke-width="1.5"
+              style="cursor:none; transition:all 0.35s;"/>
+            <!-- Q3 abajo-izquierda: Software -->
+            <path id="arc3" data-phase="3"
+              d="M200,200 L200,350 A150,150 0 0,1 50,200 Z"
+              fill="rgba(123,47,255,0.07)" stroke="rgba(123,47,255,0.3)" stroke-width="1.5"
+              style="cursor:none; transition:all 0.35s;"/>
+            <!-- Q4 arriba-izquierda: Pruebas -->
+            <path id="arc4" data-phase="4"
+              d="M200,200 L50,200 A150,150 0 0,1 200,50 Z"
+              fill="rgba(0,255,170,0.06)" stroke="rgba(0,255,170,0.28)" stroke-width="1.5"
+              style="cursor:none; transition:all 0.35s;"/>
+
+            <!-- Separadores -->
+            <line x1="200" y1="50" x2="200" y2="350" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <line x1="50" y1="200" x2="350" y2="200" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+            <!-- Centro -->
+            <circle cx="200" cy="200" r="58" fill="rgba(5,12,26,0.98)" stroke="rgba(0,212,255,0.25)" stroke-width="1.5"/>
+            <circle cx="200" cy="200" r="52" fill="none" stroke="rgba(0,212,255,0.08)" stroke-width="1" stroke-dasharray="3 5"/>
+            <text x="200" y="193" text-anchor="middle" font-family="Orbitron,sans-serif" font-size="13" fill="#00d4ff" font-weight="900" letter-spacing="2">SIT</text>
+            <text x="200" y="212" text-anchor="middle" font-family="Orbitron,sans-serif" font-size="9" fill="rgba(107,138,170,0.8)" letter-spacing="3">RFID</text>
+
+            <!-- Q1: Diseño — arriba derecha -->
+            <text x="292" y="118" text-anchor="middle" font-size="28">🎨</text>
+            <text x="292" y="148" text-anchor="middle" font-family="Orbitron,sans-serif" font-size="11" fill="#00d4ff" font-weight="700">01</text>
+            <text x="292" y="164" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="rgba(232,244,255,0.55)">Diseño</text>
+
+            <!-- Q2: Implementación — abajo derecha -->
+            <text x="292" y="282" text-anchor="middle" font-size="28">🔧</text>
+            <text x="292" y="312" text-anchor="middle" font-family="Orbitron,sans-serif" font-size="11" fill="#0066ff" font-weight="700">02</text>
+            <text x="292" y="328" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="rgba(232,244,255,0.55)">Implementación</text>
+
+            <!-- Q3: Software — abajo izquierda -->
+            <text x="108" y="282" text-anchor="middle" font-size="28">💻</text>
+            <text x="108" y="312" text-anchor="middle" font-family="Orbitron,sans-serif" font-size="11" fill="#7b2fff" font-weight="700">03</text>
+            <text x="108" y="328" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="rgba(232,244,255,0.55)">Software</text>
+
+            <!-- Q4: Pruebas — arriba izquierda -->
+            <text x="108" y="118" text-anchor="middle" font-size="28">🧪</text>
+            <text x="108" y="148" text-anchor="middle" font-family="Orbitron,sans-serif" font-size="11" fill="#00ffaa" font-weight="700">04</text>
+            <text x="108" y="164" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="rgba(232,244,255,0.55)">Validación</text>
+
+            <!-- Flechas de ciclo (sobre el borde exterior ~radio 168) -->
+            <path d="M 285 88 A 140 140 0 0 1 362 200" fill="none" stroke="rgba(0,212,255,0.35)" stroke-width="2" marker-end="url(#am1)"/>
+            <path d="M 362 220 A 140 140 0 0 1 250 355" fill="none" stroke="rgba(0,102,255,0.35)" stroke-width="2" marker-end="url(#am2)"/>
+            <path d="M 155 358 A 140 140 0 0 1 42 220" fill="none" stroke="rgba(123,47,255,0.35)" stroke-width="2" marker-end="url(#am3)"/>
+            <path d="M 40 180 A 140 140 0 0 1 165 52" fill="none" stroke="rgba(0,255,170,0.3)" stroke-width="2" marker-end="url(#am4)"/>
+          </svg>
+        </div>
+
+        <!-- ── PANEL DERECHO ── -->
+        <div id="meto-detail" style="height:100%; display:flex; flex-direction:column; justify-content:center;">
+          <!-- Overview: 4 mini tarjetas -->
+          <div id="meto-overview" style="display:flex; flex-direction:column; gap:13px;">
+            <div class="meto-mini" data-phase="1" style="display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:14px;background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.2);cursor:none;transition:all 0.25s;">
+              <div style="font-size:1.6rem; flex-shrink:0;">🎨</div>
+              <div><div style="font-family:'Orbitron',sans-serif;font-size:0.76rem;color:var(--accent);margin-bottom:3px;">01 · Diseño del Sistema</div><div style="font-size:0.78rem;color:var(--muted);">Arquitectura IoT, capas y protocolos</div></div>
+            </div>
+            <div class="meto-mini" data-phase="2" style="display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:14px;background:rgba(0,102,255,0.06);border:1px solid rgba(0,102,255,0.2);cursor:none;transition:all 0.25s;">
+              <div style="font-size:1.6rem; flex-shrink:0;">🔧</div>
+              <div><div style="font-family:'Orbitron',sans-serif;font-size:0.76rem;color:var(--accent2);margin-bottom:3px;">02 · Implementación Física</div><div style="font-size:0.78rem;color:var(--muted);">RFID, cámara, sensores y barrera</div></div>
+            </div>
+            <div class="meto-mini" data-phase="3" style="display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:14px;background:rgba(123,47,255,0.06);border:1px solid rgba(123,47,255,0.2);cursor:none;transition:all 0.25s;">
+              <div style="font-size:1.6rem; flex-shrink:0;">💻</div>
+              <div><div style="font-family:'Orbitron',sans-serif;font-size:0.76rem;color:var(--accent3);margin-bottom:3px;">03 · Desarrollo de Software</div><div style="font-size:0.78rem;color:var(--muted);">Backend, ML, API REST y base de datos</div></div>
+            </div>
+            <div class="meto-mini" data-phase="4" style="display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:14px;background:rgba(0,255,170,0.05);border:1px solid rgba(0,255,170,0.2);cursor:none;transition:all 0.25s;">
+              <div style="font-size:1.6rem; flex-shrink:0;">🧪</div>
+              <div><div style="font-family:'Orbitron',sans-serif;font-size:0.76rem;color:var(--success);margin-bottom:3px;">04 · Pruebas y Validación</div><div style="font-size:0.78rem;color:var(--muted);">Precisión, tiempos y comparativa</div></div>
+            </div>
+            <div style="font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--muted);letter-spacing:2px;opacity:0.5;margin-top:4px;">↑ CLICK EN FASE PARA VER DETALLE</div>
+          </div>
+          <!-- Detalle expandido -->
+          <div id="meto-expanded" style="display:none; flex-direction:column; justify-content:center; height:100%; padding:28px; border-radius:18px; position:relative;">
+            <button id="meto-back" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--muted);border-radius:8px;padding:4px 12px;font-size:0.68rem;cursor:none;font-family:'Space Mono',monospace;">✕ volver</button>
+            <div style="font-size:2.6rem;margin-bottom:14px;" id="meto-exp-icon"></div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;margin-bottom:12px;" id="meto-exp-title"></div>
+            <div style="font-size:0.88rem;line-height:1.75;color:rgba(232,244,255,0.82);" id="meto-exp-desc"></div>
+            <div style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap;" id="meto-exp-tags"></div>
           </div>
         </div>
-        <div class="step-box">
-          <div class="step-num" style="color:var(--accent2);">02</div>
-          <div class="step-content">
-            <h4>Implementación Física</h4>
-            <p>Instalación de lector RFID, cámara de reconocimiento, sensores ultrasónicos y barrera automatizada en el punto de acceso.</p>
-          </div>
-        </div>
-        <div class="step-box">
-          <div class="step-num" style="color:var(--accent3);">03</div>
-          <div class="step-content">
-            <h4>Desarrollo de Software</h4>
-            <p>Backend robusto, base de datos PostgreSQL, API REST, motor de asignación inteligente y modelo ML para OCR de placas.</p>
-          </div>
-        </div>
-        <div class="step-box">
-          <div class="step-num" style="color:var(--success);">04</div>
-          <div class="step-content">
-            <h4>Pruebas y Validación</h4>
-            <p>Evaluación de precisión de lectura, tiempos de respuesta del sistema y comparativa: registro manual vs sistema híbrido SIT-RFID.</p>
-          </div>
-        </div>
+
       </div>
     </div>
   </div>
 
-  <!-- SLIDE 9 – ARQUITECTURA -->
+  <script>
+  (function(){
+    const phases = {
+      1:{icon:'🎨',title:'01 · Diseño del Sistema',color:'var(--accent)',bg:'rgba(0,212,255,0.07)',border:'rgba(0,212,255,0.3)',fill:'rgba(0,212,255,0.2)',desc:'Se define la arquitectura IoT distribuida: capas sensorial, de inteligencia y de actuación. Se establecen los protocolos de comunicación (MQTT, REST), los flujos de datos entre sensores, backend y usuarios finales, y los requerimientos del hardware.',tags:['Arquitectura IoT','Protocolos MQTT','Diseño de capas','Flujos de datos']},
+      2:{icon:'🔧',title:'02 · Implementación Física',color:'var(--accent2)',bg:'rgba(0,102,255,0.07)',border:'rgba(0,102,255,0.3)',fill:'rgba(0,102,255,0.2)',desc:'Instalación y configuración del lector RFID UHF, módulo de cámara, sensor ultrasónico de proximidad y servo-motor con barrera automatizada. El microcontrolador ESP32 gestiona la comunicación entre todos los periféricos en el punto de acceso.',tags:['RFID UHF','ESP32','Sensor ultrasónico','Barrera automatizada']},
+      3:{icon:'💻',title:'03 · Desarrollo de Software',color:'var(--accent3)',bg:'rgba(123,47,255,0.07)',border:'rgba(123,47,255,0.3)',fill:'rgba(123,47,255,0.2)',desc:'Desarrollo del backend con API REST, base de datos PostgreSQL para trazabilidad completa, modelo de Machine Learning en Python con OCR para reconocimiento de placas, y el motor de asignación inteligente de turnos.',tags:['Python + ML','PostgreSQL','API REST','Motor de turnos']},
+      4:{icon:'🧪',title:'04 · Pruebas y Validación',color:'var(--success)',bg:'rgba(0,255,170,0.06)',border:'rgba(0,255,170,0.25)',fill:'rgba(0,255,170,0.16)',desc:'Evaluación de la precisión de lectura RFID y reconocimiento de placas bajo distintas condiciones. Medición de tiempos de respuesta del sistema completo. Comparativa cuantitativa entre el registro manual tradicional y el sistema híbrido SIT-RFID.',tags:['Precisión OCR','Tiempos de respuesta','Comparativa','Validación cruzada']},
+    };
+    const baseFills={1:'rgba(0,212,255,0.07)',2:'rgba(0,102,255,0.07)',3:'rgba(123,47,255,0.07)',4:'rgba(0,255,170,0.06)'};
+    function showPhase(n){
+      const p=phases[n];
+      document.getElementById('meto-overview').style.display='none';
+      const exp=document.getElementById('meto-expanded');
+      exp.style.display='flex'; exp.style.background=p.bg; exp.style.border='1px solid '+p.border;
+      document.getElementById('meto-exp-icon').textContent=p.icon;
+      document.getElementById('meto-exp-title').textContent=p.title;
+      document.getElementById('meto-exp-title').style.color=p.color;
+      document.getElementById('meto-exp-desc').textContent=p.desc;
+      document.getElementById('meto-exp-tags').innerHTML=p.tags.map(t=>`<span style="font-size:0.72rem;padding:4px 12px;border-radius:6px;background:${p.bg};color:${p.color};border:1px solid ${p.border};">${t}</span>`).join('');
+      for(let i=1;i<=4;i++){
+        const a=document.getElementById('arc'+i);
+        a.style.fill=i===n?p.fill:baseFills[i];
+        a.style.strokeWidth=i===n?'2.5':'1.5';
+        a.style.opacity=i===n?'1':'0.4';
+      }
+    }
+    function showOverview(){
+      document.getElementById('meto-overview').style.display='flex';
+      document.getElementById('meto-expanded').style.display='none';
+      for(let i=1;i<=4;i++){document.getElementById('arc'+i).style.fill=baseFills[i];document.getElementById('arc'+i).style.strokeWidth='1.5';document.getElementById('arc'+i).style.opacity='1';}
+    }
+    for(let i=1;i<=4;i++) document.getElementById('arc'+i).addEventListener('click',e=>{e.stopPropagation();showPhase(i);});
+    document.querySelectorAll('.meto-mini').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation();showPhase(parseInt(el.dataset.phase));}));
+    document.getElementById('meto-back').addEventListener('click',e=>{e.stopPropagation();showOverview();});
+  })();
+  </script>
+
+  <!-- SLIDE 9 – FLUJO DEL SISTEMA -->
   <div class="slide" id="slide-9">
-    <div class="slide-inner">
-      <div class="slide-header">
+    <div class="slide-inner" style="max-width:1200px;">
+      <div class="slide-header" style="margin-bottom:16px;">
         <div class="slide-number">09 / ARQUITECTURA</div>
         <div class="slide-title">Flujo del Sistema</div>
         <div class="slide-rule"></div>
       </div>
-      <div style="margin-bottom:20px;">
-        <div class="arch-flow">
-          <!-- CAPA SENSORIAL: azul -->
-          <div class="arch-node" data-layer="sensorial" data-color="accent">
-            <div class="arch-node-icon">🚗</div><div class="arch-node-label">Vehículo</div>
-          </div>
-          <div class="arch-arrow arch-arr" data-layer="sensorial">→</div>
-          <div class="arch-node" data-layer="sensorial" data-color="accent">
-            <div class="arch-node-icon">📡</div><div class="arch-node-label">RFID</div>
-          </div>
-          <div class="arch-arrow arch-arr" data-layer="sensorial">→</div>
-          <div class="arch-node" data-layer="sensorial" data-color="accent">
-            <div class="arch-node-icon">📷</div><div class="arch-node-label">Cámara</div>
-          </div>
-          <!-- CAPA INTELIGENCIA: morado -->
-          <div class="arch-arrow arch-arr" data-layer="inteligencia">→</div>
-          <div class="arch-node" data-layer="inteligencia" data-color="accent3">
-            <div class="arch-node-icon">🤖</div><div class="arch-node-label">ML / OCR</div>
-          </div>
-          <div class="arch-arrow arch-arr" data-layer="inteligencia">→</div>
-          <div class="arch-node" data-layer="inteligencia" data-color="accent3">
-            <div class="arch-node-icon">🔐</div><div class="arch-node-label">Validación</div>
-          </div>
-          <div class="arch-arrow arch-arr" data-layer="inteligencia">→</div>
-          <div class="arch-node" data-layer="inteligencia" data-color="accent3">
-            <div class="arch-node-icon">🎫</div><div class="arch-node-label">Turno</div>
-          </div>
-          <!-- CAPA ACTUACIÓN: verde -->
-          <div class="arch-arrow arch-arr" data-layer="actuacion">→</div>
-          <div class="arch-node" data-layer="actuacion" data-color="success">
-            <div class="arch-node-icon">🚧</div><div class="arch-node-label">Barrera</div>
-          </div>
-        </div>
+
+      <!-- Tooltip flotante -->
+      <div id="fl-tooltip" style="display:none; position:fixed; z-index:200; pointer-events:none; max-width:320px; padding:18px 22px; border-radius:16px; backdrop-filter:blur(20px); box-shadow:0 12px 50px rgba(0,0,0,0.5);">
+        <div style="font-size:1.8rem; margin-bottom:8px;" id="flt-icon"></div>
+        <div style="font-family:'Orbitron',sans-serif; font-size:0.85rem; font-weight:700; margin-bottom:8px;" id="flt-title"></div>
+        <div style="font-size:0.8rem; line-height:1.65; color:rgba(232,244,255,0.82);" id="flt-desc"></div>
+        <div style="margin-top:10px; display:flex; gap:6px; flex-wrap:wrap;" id="flt-tags"></div>
+        <div style="margin-top:10px; font-family:'Space Mono',monospace; font-size:0.6rem; color:rgba(107,138,170,0.6); letter-spacing:2px;">CLICK PARA CERRAR</div>
       </div>
-      <div class="three-col">
-        <!-- Tarjeta Sensorial -->
-        <div class="card layer-card" id="card-sensorial" data-layer="sensorial" style="padding:16px 20px; cursor:none; transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;">
-          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent); letter-spacing:2px; margin-bottom:10px;">CAPA SENSORIAL</div>
-          <div class="problem-item"><div class="problem-dot dot-accent"></div><div class="problem-text" style="font-size:0.8rem;">Sensor ultrasónico detecta vehículo</div></div>
-          <div class="problem-item"><div class="problem-dot dot-accent"></div><div class="problem-text" style="font-size:0.8rem;">RFID UHF lee ID de tag</div></div>
-          <div class="problem-item"><div class="problem-dot dot-accent"></div><div class="problem-text" style="font-size:0.8rem;">Cámara captura placa</div></div>
-        </div>
-        <!-- Tarjeta Inteligencia -->
-        <div class="card layer-card" id="card-inteligencia" data-layer="inteligencia" style="padding:16px 20px; cursor:none; transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;">
-          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--accent3); letter-spacing:2px; margin-bottom:10px;">CAPA INTELIGENCIA</div>
-          <div class="problem-item"><div class="problem-dot dot-purple"></div><div class="problem-text" style="font-size:0.8rem;">ML reconoce placa automáticamente</div></div>
-          <div class="problem-item"><div class="problem-dot dot-purple"></div><div class="problem-text" style="font-size:0.8rem;">Backend valida coincidencia cruzada</div></div>
-          <div class="problem-item"><div class="problem-dot dot-purple"></div><div class="problem-text" style="font-size:0.8rem;">Motor asigna turno óptimo</div></div>
-        </div>
-        <!-- Tarjeta Actuación -->
-        <div class="card layer-card" id="card-actuacion" data-layer="actuacion" style="padding:16px 20px; cursor:none; transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;">
-          <div style="font-family:'Space Mono',monospace; font-size:0.6rem; color:var(--success); letter-spacing:2px; margin-bottom:10px;">CAPA ACTUACIÓN</div>
-          <div class="problem-item"><div class="problem-dot dot-success"></div><div class="problem-text" style="font-size:0.8rem;">Registro automático hora de ingreso</div></div>
-          <div class="problem-item"><div class="problem-dot dot-success"></div><div class="problem-text" style="font-size:0.8rem;">Apertura automatizada de barrera</div></div>
-          <div class="problem-item"><div class="problem-dot dot-success"></div><div class="problem-text" style="font-size:0.8rem;">Comunicación MQTT segura</div></div>
-        </div>
+
+      <!-- SVG principal full-width -->
+      <div style="width:100%; position:relative;">
+        <svg id="flow-svg" width="100%" viewBox="0 0 1000 340" style="overflow:visible;">
+          <defs>
+            <!-- Gradientes de líneas -->
+            <linearGradient id="lg-s"  x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#00d4ff" stop-opacity="0.9"/><stop offset="100%" stop-color="#00d4ff" stop-opacity="0.4"/></linearGradient>
+            <linearGradient id="lg-si" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#00d4ff" stop-opacity="0.4"/><stop offset="100%" stop-color="#7b2fff" stop-opacity="0.9"/></linearGradient>
+            <linearGradient id="lg-i"  x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7b2fff" stop-opacity="0.9"/><stop offset="100%" stop-color="#7b2fff" stop-opacity="0.4"/></linearGradient>
+            <linearGradient id="lg-ia" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7b2fff" stop-opacity="0.4"/><stop offset="100%" stop-color="#00ffaa" stop-opacity="0.9"/></linearGradient>
+            <linearGradient id="lg-av" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#00ffaa" stop-opacity="0.9"/><stop offset="100%" stop-color="#00ffaa" stop-opacity="0.4"/></linearGradient>
+            <!-- Glow filter -->
+            <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <!-- Marcadores flecha -->
+            <marker id="fa-s"  markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="rgba(0,212,255,0.7)"/></marker>
+            <marker id="fa-si" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="rgba(123,47,255,0.7)"/></marker>
+            <marker id="fa-i"  markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="rgba(123,47,255,0.7)"/></marker>
+            <marker id="fa-ia" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="rgba(0,255,170,0.7)"/></marker>
+            <marker id="fa-av" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="rgba(0,255,170,0.7)"/></marker>
+          </defs>
+
+          <!-- ── ZONAS DE CAPA (fondos sutiles) ── -->
+          <rect x="0"   y="30" width="340" height="280" rx="16" fill="rgba(0,212,255,0.025)" stroke="rgba(0,212,255,0.08)" stroke-width="1"/>
+          <rect x="350" y="30" width="310" height="280" rx="16" fill="rgba(123,47,255,0.025)" stroke="rgba(123,47,255,0.08)" stroke-width="1"/>
+          <rect x="670" y="30" width="320" height="280" rx="16" fill="rgba(0,255,170,0.02)" stroke="rgba(0,255,170,0.07)" stroke-width="1"/>
+
+          <!-- Etiquetas de zona -->
+          <text x="170" y="22" text-anchor="middle" font-family="Space Mono,monospace" font-size="10" fill="rgba(0,212,255,0.5)" letter-spacing="3">● SENSORIAL</text>
+          <text x="505" y="22" text-anchor="middle" font-family="Space Mono,monospace" font-size="10" fill="rgba(123,47,255,0.5)" letter-spacing="3">● INTELIGENCIA</text>
+          <text x="830" y="22" text-anchor="middle" font-family="Space Mono,monospace" font-size="10" fill="rgba(0,255,170,0.5)" letter-spacing="3">● ACTUACIÓN</text>
+
+          <!-- ── CONEXIONES ANIMADAS ── -->
+          <!-- Sensor → Vehículo (vertical) -->
+          <line x1="100" y1="240" x2="100" y2="185" stroke="rgba(0,212,255,0.25)" stroke-width="1.5" stroke-dasharray="4 5"/>
+          <!-- Vehículo → RFID -->
+          <line x1="148" y1="140" x2="212" y2="140" stroke="url(#lg-s)" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#fa-s)"/>
+          <!-- Vehículo → Cámara (diagonal) -->
+          <line x1="130" y1="158" x2="215" y2="210" stroke="url(#lg-s)" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#fa-s)"/>
+          <!-- RFID → ML -->
+          <line x1="298" y1="140" x2="390" y2="160" stroke="url(#lg-si)" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#fa-si)"/>
+          <!-- Cámara → ML -->
+          <line x1="298" y1="220" x2="390" y2="180" stroke="url(#lg-si)" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#fa-si)"/>
+          <!-- ML → Validación -->
+          <line x1="510" y1="170" x2="590" y2="170" stroke="url(#lg-i)" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#fa-i)"/>
+          <!-- Validación → Turno (diagonal abajo) -->
+          <line x1="690" y1="188" x2="750" y2="240" stroke="url(#lg-ia)" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#fa-ia)"/>
+          <!-- Validación → Barrera (derecha) -->
+          <line x1="700" y1="170" x2="778" y2="145" stroke="url(#lg-ia)" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#fa-ia)"/>
+          <!-- Turno → DB (abajo a derecha) -->
+          <line x1="830" y1="252" x2="900" y2="240" stroke="url(#lg-av)" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#fa-av)"/>
+
+          <!-- ── NODOS ── -->
+
+          <!-- N0: Sensor ultrasónico (pequeño) -->
+          <g class="flow-node" data-node="sensor" style="cursor:none;">
+            <rect x="60" y="240" width="80" height="52" rx="10" fill="rgba(5,12,26,0.95)" stroke="rgba(0,212,255,0.2)" stroke-width="1.5" style="transition:all 0.3s;"/>
+            <text x="100" y="258" text-anchor="middle" font-size="14">📏</text>
+            <text x="100" y="274" text-anchor="middle" font-family="Space Mono,monospace" font-size="7.5" fill="rgba(0,212,255,0.6)">SENSOR</text>
+            <text x="100" y="285" text-anchor="middle" font-family="Space Mono,monospace" font-size="6.5" fill="rgba(107,138,170,0.5)">ULTRASÓNICO</text>
+          </g>
+
+          <!-- N1: Vehículo (nodo principal grande) -->
+          <g class="flow-node" data-node="vehiculo" style="cursor:none;">
+            <circle cx="100" cy="140" r="44" fill="rgba(5,12,26,0.97)" stroke="rgba(0,212,255,0.35)" stroke-width="2" style="transition:all 0.3s;"/>
+            <text x="100" y="133" text-anchor="middle" font-size="24">🚗</text>
+            <text x="100" y="156" text-anchor="middle" font-family="Space Mono,monospace" font-size="8" fill="rgba(107,138,170,0.7)">VEHÍCULO</text>
+          </g>
+
+          <!-- N2: RFID -->
+          <g class="flow-node" data-node="rfid" style="cursor:none;">
+            <circle cx="255" cy="140" r="40" fill="rgba(5,12,26,0.97)" stroke="rgba(0,212,255,0.5)" stroke-width="2" style="transition:all 0.3s;"/>
+            <text x="255" y="133" text-anchor="middle" font-size="22">📡</text>
+            <text x="255" y="155" text-anchor="middle" font-family="Space Mono,monospace" font-size="8" fill="rgba(0,212,255,0.8)">RFID UHF</text>
+          </g>
+
+          <!-- N3: Cámara -->
+          <g class="flow-node" data-node="camara" style="cursor:none;">
+            <circle cx="255" cy="225" r="36" fill="rgba(5,12,26,0.97)" stroke="rgba(0,212,255,0.5)" stroke-width="2" style="transition:all 0.3s;"/>
+            <text x="255" y="218" text-anchor="middle" font-size="20">📷</text>
+            <text x="255" y="237" text-anchor="middle" font-family="Space Mono,monospace" font-size="8" fill="rgba(0,212,255,0.8)">CÁMARA</text>
+          </g>
+
+          <!-- N4: ML/OCR (más grande, es el corazón) -->
+          <g class="flow-node" data-node="ml" style="cursor:none;">
+            <circle cx="450" cy="170" r="52" fill="rgba(5,12,26,0.97)" stroke="rgba(123,47,255,0.6)" stroke-width="2.5" style="transition:all 0.3s;"/>
+            <circle cx="450" cy="170" r="46" fill="none" stroke="rgba(123,47,255,0.12)" stroke-width="1" stroke-dasharray="3 5"/>
+            <text x="450" y="161" text-anchor="middle" font-size="26">🤖</text>
+            <text x="450" y="180" text-anchor="middle" font-family="Orbitron,sans-serif" font-size="9" fill="rgba(123,47,255,0.9)" font-weight="700">ML / OCR</text>
+          </g>
+
+          <!-- N5: Validación -->
+          <g class="flow-node" data-node="validacion" style="cursor:none;">
+            <circle cx="645" cy="170" r="48" fill="rgba(5,12,26,0.97)" stroke="rgba(123,47,255,0.55)" stroke-width="2" style="transition:all 0.3s;"/>
+            <text x="645" y="161" text-anchor="middle" font-size="24">🔐</text>
+            <text x="645" y="180" text-anchor="middle" font-family="Orbitron,sans-serif" font-size="8.5" fill="rgba(123,47,255,0.9)" font-weight="700">VALIDACIÓN</text>
+          </g>
+
+          <!-- N6: Barrera -->
+          <g class="flow-node" data-node="barrera" style="cursor:none;">
+            <circle cx="820" cy="138" r="40" fill="rgba(5,12,26,0.97)" stroke="rgba(0,255,170,0.5)" stroke-width="2" style="transition:all 0.3s;"/>
+            <text x="820" y="130" text-anchor="middle" font-size="22">🚧</text>
+            <text x="820" y="150" text-anchor="middle" font-family="Space Mono,monospace" font-size="8" fill="rgba(0,255,170,0.8)">BARRERA</text>
+          </g>
+
+          <!-- N7: Turno -->
+          <g class="flow-node" data-node="turno" style="cursor:none;">
+            <circle cx="820" cy="255" r="38" fill="rgba(5,12,26,0.97)" stroke="rgba(0,255,170,0.5)" stroke-width="2" style="transition:all 0.3s;"/>
+            <text x="820" y="247" text-anchor="middle" font-size="20">🎫</text>
+            <text x="820" y="267" text-anchor="middle" font-family="Space Mono,monospace" font-size="8" fill="rgba(0,255,170,0.8)">TURNO</text>
+          </g>
+
+          <!-- N8: BD -->
+          <g class="flow-node" data-node="bd" style="cursor:none;">
+            <rect x="900" y="210" width="82" height="55" rx="10" fill="rgba(5,12,26,0.97)" stroke="rgba(0,255,170,0.3)" stroke-width="1.5" style="transition:all 0.3s;"/>
+            <text x="941" y="228" text-anchor="middle" font-size="14">🗄️</text>
+            <text x="941" y="244" text-anchor="middle" font-family="Space Mono,monospace" font-size="7.5" fill="rgba(0,255,170,0.6)">PostgreSQL</text>
+            <text x="941" y="256" text-anchor="middle" font-family="Space Mono,monospace" font-size="6.5" fill="rgba(107,138,170,0.5)">TRAZABILIDAD</text>
+          </g>
+
+        </svg>
+
+        <div style="text-align:center; margin-top:8px; font-family:'Space Mono',monospace; font-size:0.58rem; color:var(--muted); letter-spacing:2px; opacity:0.55;">CLICK EN CUALQUIER NODO PARA VER DETALLES</div>
       </div>
     </div>
   </div>
 
-  <style>
-    /* Colores de highlight por capa */
-    .arch-node { transition: border-color 0.3s, box-shadow 0.3s, background 0.3s, transform 0.3s; }
-    .arch-node.lit-accent  { border-color: var(--accent)  !important; background: rgba(0,212,255,0.15)  !important; box-shadow: 0 0 18px rgba(0,212,255,0.35)  !important; transform: scale(1.07); }
-    .arch-node.lit-accent3 { border-color: var(--accent3) !important; background: rgba(123,47,255,0.15) !important; box-shadow: 0 0 18px rgba(123,47,255,0.4)  !important; transform: scale(1.07); }
-    .arch-node.lit-success { border-color: var(--success) !important; background: rgba(0,255,170,0.12)  !important; box-shadow: 0 0 18px rgba(0,255,170,0.35)  !important; transform: scale(1.07); }
-    .arch-node.dimmed { opacity: 0.3; transform: scale(0.97); }
-
-    .arch-arr { transition: color 0.3s, opacity 0.3s; }
-    .arch-arr.lit-accent  { color: var(--accent);  opacity: 1 !important; }
-    .arch-arr.lit-accent3 { color: var(--accent3); opacity: 1 !important; }
-    .arch-arr.lit-success { color: var(--success); opacity: 1 !important; }
-    .arch-arr.dimmed { opacity: 0.1; }
-
-    .layer-card.lit-accent  { border-color: rgba(0,212,255,0.6)  !important; box-shadow: 0 0 30px rgba(0,212,255,0.15)  !important; background: rgba(0,212,255,0.06)  !important; }
-    .layer-card.lit-accent3 { border-color: rgba(123,47,255,0.6) !important; box-shadow: 0 0 30px rgba(123,47,255,0.15) !important; background: rgba(123,47,255,0.06) !important; }
-    .layer-card.lit-success { border-color: rgba(0,255,170,0.6)  !important; box-shadow: 0 0 30px rgba(0,255,170,0.12)  !important; background: rgba(0,255,170,0.05)  !important; }
-    .layer-card.dimmed { opacity: 0.35; }
-  </style>
-
   <script>
   (function(){
-    const layerColor = { sensorial: 'accent', inteligencia: 'accent3', actuacion: 'success' };
-    let activeLayer = null;
+    const nodeData = {
+      vehiculo:{icon:'🚗',title:'Vehículo',color:'#00d4ff',bg:'rgba(0,212,255,0.08)',border:'rgba(0,212,255,0.3)',desc:'El vehículo se aproxima al punto de acceso. El sensor ultrasónico detecta su presencia y activa simultáneamente el lector RFID y la cámara.',tags:['Trigger del sistema','Detección de proximidad']},
+      sensor:{icon:'📏',title:'Sensor Ultrasónico',color:'#00d4ff',bg:'rgba(0,212,255,0.06)',border:'rgba(0,212,255,0.2)',desc:'El sensor HC-SR04 detecta la presencia del vehículo a distancia y envía la señal de activación al ESP32, evitando lecturas falsas cuando no hay vehículo.',tags:['HC-SR04','ESP32','Trigger']},
+      rfid:{icon:'📡',title:'Lector RFID UHF',color:'#00d4ff',bg:'rgba(0,212,255,0.08)',border:'rgba(0,212,255,0.3)',desc:'Lee el tag RFID UHF adherido al parabrisas del vehículo en milisegundos, obteniendo el ID único registrado en la base de datos del sistema.',tags:['UHF 860–960 MHz','< 100ms','Tag vehicular']},
+      camara:{icon:'📷',title:'Módulo de Cámara',color:'#00d4ff',bg:'rgba(0,212,255,0.08)',border:'rgba(0,212,255,0.3)',desc:'Captura simultáneamente una imagen de la placa vehicular junto con la lectura RFID para ser procesada por el motor de Machine Learning.',tags:['Captura imagen','Alta resolución','Tiempo real']},
+      ml:{icon:'🤖',title:'Motor ML / OCR',color:'#7b2fff',bg:'rgba(123,47,255,0.08)',border:'rgba(123,47,255,0.35)',desc:'El modelo de Machine Learning procesa la imagen de la placa con segmentación y OCR (OpenCV + Tesseract), extrayendo los caracteres con alta precisión incluso bajo distintas condiciones de luz.',tags:['Python','OpenCV','Tesseract OCR','Segmentación']},
+      validacion:{icon:'🔐',title:'Validación Cruzada',color:'#7b2fff',bg:'rgba(123,47,255,0.08)',border:'rgba(123,47,255,0.35)',desc:'El backend compara el ID del tag RFID con la placa reconocida por ML. Si ambos coinciden en la base de datos, el acceso es autenticado con doble factor de seguridad.',tags:['RFID + ML','PostgreSQL','API REST','Doble factor']},
+      barrera:{icon:'🚧',title:'Barrera Automatizada',color:'#00ffaa',bg:'rgba(0,255,170,0.06)',border:'rgba(0,255,170,0.25)',desc:'El servo-motor acciona la barrera de acceso al recibir la señal de validación exitosa. El evento queda registrado con timestamp en la base de datos.',tags:['Servo-motor','Apertura automática','< 2s']},
+      turno:{icon:'🎫',title:'Asignación de Turno',color:'#00ffaa',bg:'rgba(0,255,170,0.06)',border:'rgba(0,255,170,0.25)',desc:'El motor inteligente asigna automáticamente el turno óptimo según técnicos disponibles, tipo de servicio y tiempo estimado de atención. El cliente recibe notificación vía MQTT.',tags:['Motor inteligente','MQTT','Notificación','Optimización']},
+      bd:{icon:'🗄️',title:'Base de Datos',color:'#00ffaa',bg:'rgba(0,255,170,0.06)',border:'rgba(0,255,170,0.25)',desc:'PostgreSQL almacena el registro completo de cada acceso: ID RFID, placa reconocida, timestamp, turno asignado y técnico responsable. Genera la trazabilidad total del servicio.',tags:['PostgreSQL','Trazabilidad','Timestamps','API REST']},
+    };
 
-    function activate(layer) {
-      if (activeLayer === layer) { reset(); return; }
-      activeLayer = layer;
-      const color = layerColor[layer];
+    const tooltip = document.getElementById('fl-tooltip');
 
-      // Nodes
-      document.querySelectorAll('.arch-node').forEach(n => {
-        const nl = n.dataset.layer;
-        n.classList.remove('lit-accent','lit-accent3','lit-success','dimmed');
-        n.classList.add(nl === layer ? 'lit-' + color : 'dimmed');
-      });
-      // Arrows
-      document.querySelectorAll('.arch-arr').forEach(a => {
-        const al = a.dataset.layer;
-        a.classList.remove('lit-accent','lit-accent3','lit-success','dimmed');
-        a.classList.add(al === layer ? 'lit-' + color : 'dimmed');
-      });
-      // Cards
-      document.querySelectorAll('.layer-card').forEach(c => {
-        const cl = c.dataset.layer;
-        c.classList.remove('lit-accent','lit-accent3','lit-success','dimmed');
-        c.classList.add(cl === layer ? 'lit-' + color : 'dimmed');
-      });
+    function showNode(id, evt){
+      const d = nodeData[id]; if(!d) return;
+      tooltip.style.background = d.bg;
+      tooltip.style.border = '1px solid ' + d.border;
+      document.getElementById('flt-icon').textContent = d.icon;
+      document.getElementById('flt-title').textContent = d.title;
+      document.getElementById('flt-title').style.color = d.color;
+      document.getElementById('flt-desc').textContent = d.desc;
+      document.getElementById('flt-tags').innerHTML = d.tags.map(t=>`<span style="font-size:0.68rem;padding:3px 9px;border-radius:5px;background:${d.bg};color:${d.color};border:1px solid ${d.border};">${t}</span>`).join('');
+      tooltip.style.display = 'block';
+      // Posición inteligente
+      const x = Math.min(evt.clientX + 16, window.innerWidth - 340);
+      const y = Math.min(evt.clientY - 10, window.innerHeight - 260);
+      tooltip.style.left = x + 'px';
+      tooltip.style.top  = y + 'px';
+      // Dim otros nodos
+      document.querySelectorAll('.flow-node circle, .flow-node rect').forEach(el => el.style.opacity = '0.25');
+      const sel = document.querySelector(`.flow-node[data-node="${id}"] circle`) || document.querySelector(`.flow-node[data-node="${id}"] rect`);
+      if(sel){ sel.style.opacity='1'; sel.style.filter=`drop-shadow(0 0 16px ${d.color})`; }
     }
-
-    function reset() {
-      activeLayer = null;
-      document.querySelectorAll('.arch-node, .arch-arr, .layer-card')
-        .forEach(el => el.classList.remove('lit-accent','lit-accent3','lit-success','dimmed'));
+    function hideTooltip(){
+      tooltip.style.display='none';
+      document.querySelectorAll('.flow-node circle, .flow-node rect').forEach(el=>{el.style.opacity='';el.style.filter='';});
     }
-
-    // Click en tarjeta o nodo activa su capa (bidireccional)
-    document.querySelectorAll('.arch-node, .layer-card').forEach(el => {
-      el.addEventListener('click', e => {
-        e.stopPropagation();
-        activate(el.dataset.layer);
-      });
+    document.querySelectorAll('.flow-node').forEach(el=>{
+      el.addEventListener('click', e=>{ e.stopPropagation(); showNode(el.dataset.node, e); });
     });
-
-    // Click en fondo del slide 9 = reset
-    document.getElementById('slide-9').addEventListener('click', reset);
+    tooltip.addEventListener('click', e=>{ e.stopPropagation(); hideTooltip(); });
+    document.getElementById('slide-9').addEventListener('click', hideTooltip);
   })();
   </script>
 
   <!-- SLIDE 10 – HERRAMIENTAS -->
   <div class="slide" id="slide-10">
-    <div class="slide-inner">
-      <div class="slide-header">
+    <div class="slide-inner" style="max-width:1200px;">
+      <div class="slide-header" style="margin-bottom:18px;">
         <div class="slide-number">10 / TECNOLOGÍA</div>
         <div class="slide-title">Stack Tecnológico</div>
         <div class="slide-rule"></div>
       </div>
-      <div class="two-col">
-        <div class="card">
-          <div class="card-label">Hardware</div>
-          <div style="display:flex; flex-direction:column; gap:8px;">
-            <div class="tool-chip"><span class="tool-icon">📡</span> Lector RFID UHF</div>
-            <div class="tool-chip"><span class="tool-icon">🔌</span> ESP32 (microcontrolador IoT)</div>
-            <div class="tool-chip"><span class="tool-icon">📷</span> Módulo de cámara</div>
-            <div class="tool-chip"><span class="tool-icon">📏</span> Sensor ultrasónico de proximidad</div>
-            <div class="tool-chip"><span class="tool-icon">🚧</span> Servo-motor / Barrera automatizada</div>
-          </div>
+
+      <!-- HARDWARE -->
+      <div style="margin-bottom:20px;">
+        <div style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:3px;color:var(--accent);margin-bottom:13px;display:flex;align-items:center;gap:10px;">
+          <span style="width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);flex-shrink:0;display:inline-block;"></span>
+          HARDWARE
+          <span style="flex:1;height:1px;background:rgba(0,212,255,0.15);"></span>
         </div>
-        <div class="card">
-          <div class="card-label">Software</div>
-          <div style="display:flex; flex-direction:column; gap:8px;">
-            <div class="tool-chip"><span class="tool-icon">🐍</span> Python — Machine Learning / OCR</div>
-            <div class="tool-chip"><span class="tool-icon">☕</span> Spring Boot / Node.js — Backend API</div>
-            <div class="tool-chip"><span class="tool-icon">🗄️</span> PostgreSQL — Base de datos</div>
-            <div class="tool-chip"><span class="tool-icon">📨</span> MQTT — Protocolo IoT</div>
-            <div class="tool-chip"><span class="tool-icon">🔗</span> API REST — Integración de capas</div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:13px;">
+
+          <!-- RFID UHF -->
+          <div style="background:rgba(8,18,36,0.9);border:1px solid rgba(0,212,255,0.18);border-radius:16px;padding:20px 12px 16px;text-align:center;position:relative;overflow:hidden;transition:transform 0.2s,border-color 0.2s;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.7),transparent);"></div>
+            <div style="width:60px;height:60px;margin:0 auto 12px;border-radius:14px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);display:flex;align-items:center;justify-content:center;">
+              <!-- RFID antenna icon SVG -->
+              <svg width="40" height="40" viewBox="0 0 100 100">
+                <rect x="35" y="42" width="30" height="20" rx="3" fill="none" stroke="#00d4ff" stroke-width="4"/>
+                <rect x="42" y="48" width="16" height="8" rx="2" fill="rgba(0,212,255,0.3)"/>
+                <path d="M20 30 Q50 15 80 30" fill="none" stroke="#00d4ff" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+                <path d="M27 38 Q50 25 73 38" fill="none" stroke="#00d4ff" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+                <line x1="50" y1="62" x2="50" y2="78" stroke="#00d4ff" stroke-width="4"/>
+                <line x1="38" y1="78" x2="62" y2="78" stroke="#00d4ff" stroke-width="4" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:0.63rem;font-weight:700;color:var(--accent);margin-bottom:5px;letter-spacing:1px;">RFID UHF</div>
+            <div style="font-size:0.68rem;color:var(--muted);line-height:1.5;">Lector largo<br>alcance</div>
           </div>
+
+          <!-- ESP32 -->
+          <div style="background:rgba(8,18,36,0.9);border:1px solid rgba(0,212,255,0.18);border-radius:16px;padding:20px 12px 16px;text-align:center;position:relative;overflow:hidden;transition:transform 0.2s,border-color 0.2s;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.7),transparent);"></div>
+            <div style="width:60px;height:60px;margin:0 auto 12px;border-radius:14px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);display:flex;align-items:center;justify-content:center;">
+              <!-- ESP32 chip SVG -->
+              <svg width="40" height="40" viewBox="0 0 100 100">
+                <rect x="25" y="25" width="50" height="50" rx="5" fill="rgba(0,100,60,0.85)" stroke="#00d4ff" stroke-width="3"/>
+                <rect x="33" y="33" width="34" height="34" rx="3" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+                <text x="50" y="54" text-anchor="middle" font-family="monospace" font-size="11" font-weight="900" fill="#00d4ff">ESP</text>
+                <text x="50" y="66" text-anchor="middle" font-family="monospace" font-size="10" fill="rgba(0,212,255,0.7)">32</text>
+                <!-- pines -->
+                <line x1="25" y1="35" x2="14" y2="35" stroke="#00d4ff" stroke-width="2.5"/>
+                <line x1="25" y1="45" x2="14" y2="45" stroke="#00d4ff" stroke-width="2.5"/>
+                <line x1="25" y1="55" x2="14" y2="55" stroke="#00d4ff" stroke-width="2.5"/>
+                <line x1="25" y1="65" x2="14" y2="65" stroke="#00d4ff" stroke-width="2.5"/>
+                <line x1="75" y1="35" x2="86" y2="35" stroke="#00d4ff" stroke-width="2.5"/>
+                <line x1="75" y1="45" x2="86" y2="45" stroke="#00d4ff" stroke-width="2.5"/>
+                <line x1="75" y1="55" x2="86" y2="55" stroke="#00d4ff" stroke-width="2.5"/>
+                <line x1="75" y1="65" x2="86" y2="65" stroke="#00d4ff" stroke-width="2.5"/>
+              </svg>
+            </div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:0.63rem;font-weight:700;color:var(--accent);margin-bottom:5px;letter-spacing:1px;">ESP32</div>
+            <div style="font-size:0.68rem;color:var(--muted);line-height:1.5;">Microcontrolador<br>IoT WiFi/BT</div>
+          </div>
+
+          <!-- CÁMARA -->
+          <div style="background:rgba(8,18,36,0.9);border:1px solid rgba(0,212,255,0.18);border-radius:16px;padding:20px 12px 16px;text-align:center;position:relative;overflow:hidden;transition:transform 0.2s,border-color 0.2s;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.7),transparent);"></div>
+            <div style="width:60px;height:60px;margin:0 auto 12px;border-radius:14px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);display:flex;align-items:center;justify-content:center;">
+              <!-- Camera SVG -->
+              <svg width="40" height="40" viewBox="0 0 100 100">
+                <rect x="12" y="32" width="76" height="50" rx="8" fill="rgba(0,212,255,0.1)" stroke="#00d4ff" stroke-width="3.5"/>
+                <path d="M35 32 L40 20 L60 20 L65 32 Z" fill="rgba(0,212,255,0.2)" stroke="#00d4ff" stroke-width="3"/>
+                <circle cx="50" cy="57" r="16" fill="none" stroke="#00d4ff" stroke-width="3.5"/>
+                <circle cx="50" cy="57" r="9" fill="rgba(0,212,255,0.25)" stroke="#00d4ff" stroke-width="2"/>
+                <circle cx="50" cy="57" r="4" fill="rgba(0,212,255,0.6)"/>
+                <circle cx="74" cy="40" r="4" fill="rgba(0,212,255,0.4)" stroke="#00d4ff" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:0.63rem;font-weight:700;color:var(--accent);margin-bottom:5px;letter-spacing:1px;">CÁMARA</div>
+            <div style="font-size:0.68rem;color:var(--muted);line-height:1.5;">Captura placa<br>vehicular</div>
+          </div>
+
+          <!-- HC-SR04 -->
+          <div style="background:rgba(8,18,36,0.9);border:1px solid rgba(0,212,255,0.18);border-radius:16px;padding:20px 12px 16px;text-align:center;position:relative;overflow:hidden;transition:transform 0.2s,border-color 0.2s;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.7),transparent);"></div>
+            <div style="width:60px;height:60px;margin:0 auto 12px;border-radius:14px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);display:flex;align-items:center;justify-content:center;">
+              <!-- Ultrasonic sensor SVG -->
+              <svg width="40" height="40" viewBox="0 0 100 100">
+                <rect x="10" y="35" width="80" height="30" rx="6" fill="rgba(0,80,120,0.6)" stroke="#00d4ff" stroke-width="3"/>
+                <circle cx="28" cy="50" r="11" fill="rgba(0,212,255,0.15)" stroke="#00d4ff" stroke-width="2.5"/>
+                <circle cx="28" cy="50" r="5" fill="rgba(0,212,255,0.5)"/>
+                <circle cx="72" cy="50" r="11" fill="rgba(0,212,255,0.15)" stroke="#00d4ff" stroke-width="2.5"/>
+                <circle cx="72" cy="50" r="5" fill="rgba(0,212,255,0.5)"/>
+                <!-- ondas -->
+                <path d="M88 38 Q96 50 88 62" fill="none" stroke="rgba(0,212,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+                <path d="M93 33 Q104 50 93 67" fill="none" stroke="rgba(0,212,255,0.25)" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:0.63rem;font-weight:700;color:var(--accent);margin-bottom:5px;letter-spacing:1px;">HC-SR04</div>
+            <div style="font-size:0.68rem;color:var(--muted);line-height:1.5;">Sensor<br>ultrasónico</div>
+          </div>
+
+          <!-- SERVO / BARRERA -->
+          <div style="background:rgba(8,18,36,0.9);border:1px solid rgba(0,212,255,0.18);border-radius:16px;padding:20px 12px 16px;text-align:center;position:relative;overflow:hidden;transition:transform 0.2s,border-color 0.2s;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.7),transparent);"></div>
+            <div style="width:60px;height:60px;margin:0 auto 12px;border-radius:14px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);display:flex;align-items:center;justify-content:center;">
+              <!-- Barrier/servo SVG -->
+              <svg width="40" height="40" viewBox="0 0 100 100">
+                <rect x="10" y="55" width="30" height="32" rx="5" fill="rgba(0,212,255,0.15)" stroke="#00d4ff" stroke-width="3"/>
+                <circle cx="25" cy="55" r="7" fill="rgba(0,212,255,0.3)" stroke="#00d4ff" stroke-width="2.5"/>
+                <!-- brazo barrera -->
+                <line x1="25" y1="55" x2="88" y2="22" stroke="#00d4ff" stroke-width="5" stroke-linecap="round"/>
+                <!-- rayas barrera -->
+                <line x1="42" y1="46" x2="47" y2="49" stroke="rgba(255,200,0,0.8)" stroke-width="3.5"/>
+                <line x1="55" y1="39" x2="60" y2="42" stroke="rgba(255,200,0,0.8)" stroke-width="3.5"/>
+                <line x1="68" y1="32" x2="73" y2="35" stroke="rgba(255,200,0,0.8)" stroke-width="3.5"/>
+                <line x1="14" y1="87" x2="90" y2="87" stroke="rgba(0,212,255,0.4)" stroke-width="2.5" stroke-dasharray="5 4"/>
+              </svg>
+            </div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:0.63rem;font-weight:700;color:var(--accent);margin-bottom:5px;letter-spacing:1px;">SERVO MOTOR</div>
+            <div style="font-size:0.68rem;color:var(--muted);line-height:1.5;">Barrera<br>automatizada</div>
+          </div>
+
         </div>
       </div>
+
+      <!-- SOFTWARE -->
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:3px;color:var(--accent3);margin-bottom:13px;display:flex;align-items:center;gap:10px;">
+          <span style="width:7px;height:7px;border-radius:50%;background:var(--accent3);box-shadow:0 0 8px var(--accent3);flex-shrink:0;display:inline-block;"></span>
+          SOFTWARE
+          <span style="flex:1;height:1px;background:rgba(123,47,255,0.2);"></span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:13px;">
+
+          <!-- Python -->
+          <div style="background:rgba(8,18,36,0.9);border:1px solid rgba(123,47,255,0.18);border-radius:16px;padding:20px 12px 16px;text-align:center;position:relative;overflow:hidden;transition:transform 0.2s,border-color 0.2s;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(123,47,255,0.7),transparent);"></div>
+            <div style="width:60px;height:60px;margin:0 auto 12px;border-radius:14px;background:rgba(123,47,255,0.07);border:1px solid rgba(123,47,255,0.2);display:flex;align-items:center;justify-content:center;">
+              <!-- Python logo SVG -->
+              <svg width="38" height="38" viewBox="0 0 110 110">
+                <defs><linearGradient id="pyb" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#387EB8"/><stop offset="100%" stop-color="#366994"/></linearGradient>
+                <linearGradient id="pyy" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFE052"/><stop offset="100%" stop-color="#FFC331"/></linearGradient></defs>
+                <path d="M54 10 C38 10 30 18 30 30 L30 40 L60 40 L60 44 L22 44 C12 44 6 52 6 64 C6 76 12 84 22 84 L32 84 L32 72 C32 62 40 56 54 56 L70 56 C80 56 86 50 86 40 L86 30 C86 18 78 10 64 10 Z M42 20 C45 20 47 22 47 25 C47 28 45 30 42 30 C39 30 37 28 37 25 C37 22 39 20 42 20 Z" fill="url(#pyb)"/>
+                <path d="M56 100 C72 100 80 92 80 80 L80 70 L50 70 L50 66 L88 66 C98 66 104 58 104 46 C104 34 98 26 88 26 L78 26 L78 38 C78 48 70 54 56 54 L40 54 C30 54 24 60 24 70 L24 80 C24 92 32 100 46 100 Z M68 90 C65 90 63 88 63 85 C63 82 65 80 68 80 C71 80 73 82 73 85 C73 88 71 90 68 90 Z" fill="url(#pyy)"/>
+              </svg>
+            </div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:0.63rem;font-weight:700;color:var(--accent3);margin-bottom:5px;letter-spacing:1px;">PYTHON</div>
+            <div style="font-size:0.68rem;color:var(--muted);line-height:1.5;">ML / OCR<br>processing</div>
+          </div>
+
+          <!-- OpenCV -->
+          <div style="background:rgba(8,18,36,0.9);border:1px solid rgba(123,47,255,0.18);border-radius:16px;padding:20px 12px 16px;text-align:center;position:relative;overflow:hidden;transition:transform 0.2s,border-color 0.2s;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(123,47,255,0.7),transparent);"></div>
+            <div style="width:60px;height:60px;margin:0 auto 12px;border-radius:14px;background:rgba(123,47,255,0.07);border:1px solid rgba(123,47,255,0.2);display:flex;align-items:center;justify-content:center;">
+              <!-- OpenCV logo (3 circles) -->
+              <svg width="40" height="40" viewBox="0 0 100 100">
+                <circle cx="50" cy="22" r="18" fill="none" stroke="#C30" stroke-width="9" stroke-dasharray="70 113"/>
+                <circle cx="27" cy="63" r="18" fill="none" stroke="#0C0" stroke-width="9" stroke-dasharray="70 113"/>
+                <circle cx="73" cy="63" r="18" fill="none" stroke="#00C" stroke-width="9" stroke-dasharray="70 113"/>
+                <circle cx="50" cy="22" r="7" fill="#C30"/>
+                <circle cx="27" cy="63" r="7" fill="#0C0"/>
+                <circle cx="73" cy="63" r="7" fill="#00C"/>
+              </svg>
+            </div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:0.63rem;font-weight:700;color:var(--accent3);margin-bottom:5px;letter-spacing:1px;">OPENCV</div>
+            <div style="font-size:0.68rem;color:var(--muted);line-height:1.5;">Visión<br>artificial</div>
+          </div>
+
+          <!-- PostgreSQL -->
+          <div style="background:rgba(8,18,36,0.9);border:1px solid rgba(123,47,255,0.18);border-radius:16px;padding:20px 12px 16px;text-align:center;position:relative;overflow:hidden;transition:transform 0.2s,border-color 0.2s;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(123,47,255,0.7),transparent);"></div>
+            <div style="width:60px;height:60px;margin:0 auto 12px;border-radius:14px;background:rgba(123,47,255,0.07);border:1px solid rgba(123,47,255,0.2);display:flex;align-items:center;justify-content:center;">
+              <!-- PostgreSQL elephant SVG -->
+              <svg width="38" height="38" viewBox="0 0 100 100">
+                <ellipse cx="50" cy="55" rx="30" ry="32" fill="#336791"/>
+                <ellipse cx="50" cy="55" rx="24" ry="27" fill="#4a90d9" opacity="0.3"/>
+                <!-- trompa -->
+                <path d="M72 45 Q90 35 85 60 Q80 70 72 65" fill="#336791" stroke="#336791" stroke-width="1"/>
+                <!-- oreja -->
+                <ellipse cx="28" cy="38" rx="12" ry="16" fill="#336791" transform="rotate(-15,28,38)"/>
+                <ellipse cx="28" cy="38" rx="7" ry="11" fill="#4a90d9" transform="rotate(-15,28,38)" opacity="0.5"/>
+                <!-- ojo -->
+                <circle cx="42" cy="45" r="4" fill="white"/>
+                <circle cx="43" cy="45" r="2.5" fill="#1a3a5c"/>
+                <!-- texto -->
+                <text x="50" y="78" text-anchor="middle" font-family="Arial" font-size="10" font-weight="900" fill="white">PostgreSQL</text>
+              </svg>
+            </div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:0.63rem;font-weight:700;color:var(--accent3);margin-bottom:5px;letter-spacing:1px;">POSTGRESQL</div>
+            <div style="font-size:0.68rem;color:var(--muted);line-height:1.5;">Base de<br>datos</div>
+          </div>
+
+          <!-- Node.js -->
+          <div style="background:rgba(8,18,36,0.9);border:1px solid rgba(123,47,255,0.18);border-radius:16px;padding:20px 12px 16px;text-align:center;position:relative;overflow:hidden;transition:transform 0.2s,border-color 0.2s;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(123,47,255,0.7),transparent);"></div>
+            <div style="width:60px;height:60px;margin:0 auto 12px;border-radius:14px;background:rgba(123,47,255,0.07);border:1px solid rgba(123,47,255,0.2);display:flex;align-items:center;justify-content:center;">
+              <!-- Node.js hexagon logo -->
+              <svg width="40" height="40" viewBox="0 0 100 100">
+                <polygon points="50,8 88,29 88,71 50,92 12,71 12,29" fill="#3d7e38" stroke="#5cb85c" stroke-width="2"/>
+                <polygon points="50,20 80,36 80,64 50,80 20,64 20,36" fill="rgba(92,184,92,0.15)"/>
+                <text x="50" y="48" text-anchor="middle" font-family="Arial" font-size="13" font-weight="900" fill="white">node</text>
+                <text x="50" y="63" text-anchor="middle" font-family="Arial" font-size="11" fill="rgba(255,255,255,0.8)">.js</text>
+              </svg>
+            </div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:0.63rem;font-weight:700;color:var(--accent3);margin-bottom:5px;letter-spacing:1px;">NODE.JS</div>
+            <div style="font-size:0.68rem;color:var(--muted);line-height:1.5;">Backend<br>API REST</div>
+          </div>
+
+          <!-- MQTT -->
+          <div style="background:rgba(8,18,36,0.9);border:1px solid rgba(123,47,255,0.18);border-radius:16px;padding:20px 12px 16px;text-align:center;position:relative;overflow:hidden;transition:transform 0.2s,border-color 0.2s;">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(123,47,255,0.7),transparent);"></div>
+            <div style="width:60px;height:60px;margin:0 auto 12px;border-radius:14px;background:rgba(123,47,255,0.07);border:1px solid rgba(123,47,255,0.2);display:flex;align-items:center;justify-content:center;">
+              <!-- MQTT logo: púrpura con símbolo de broadcast -->
+              <svg width="40" height="40" viewBox="0 0 100 100">
+                <rect width="100" height="100" rx="14" fill="#660066"/>
+                <!-- símbolo broadcast / IoT -->
+                <circle cx="50" cy="62" r="7" fill="white"/>
+                <path d="M32 45 Q50 30 68 45" fill="none" stroke="white" stroke-width="4.5" stroke-linecap="round"/>
+                <path d="M22 35 Q50 12 78 35" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="3.5" stroke-linecap="round"/>
+                <text x="50" y="88" text-anchor="middle" font-family="Arial" font-size="13" font-weight="900" fill="white">MQTT</text>
+              </svg>
+            </div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:0.63rem;font-weight:700;color:var(--accent3);margin-bottom:5px;letter-spacing:1px;">MQTT</div>
+            <div style="font-size:0.68rem;color:var(--muted);line-height:1.5;">Protocolo<br>IoT</div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -1240,25 +1700,19 @@
   const trailContainer = document.getElementById('trail-container');
   const TRAIL_LENGTH = 10;
   const trail = [];
-
   for (let i = 0; i < TRAIL_LENGTH; i++) {
     const dot = document.createElement('div');
     dot.className = 'trail-dot';
     trailContainer.appendChild(dot);
     trail.push({ el: dot, x: 0, y: 0 });
   }
-
   let mouseX = 0, mouseY = 0;
-
   document.addEventListener('mousemove', e => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
+    mouseX = e.clientX; mouseY = e.clientY;
     cursor.style.left = mouseX + 'px';
     cursor.style.top = mouseY + 'px';
   });
-
   function animateTrail() {
-    let x = mouseX, y = mouseY;
     trail.forEach((dot, i) => {
       const prev = i === 0 ? { x: mouseX, y: mouseY } : trail[i - 1];
       dot.x += (prev.x - dot.x) * 0.4;
@@ -1280,24 +1734,24 @@
 
   // Build dots
   const dotsEl = document.getElementById('progress-dots');
-  for(let i = 1; i <= total; i++) {
+  for (let i = 1; i <= total; i++) {
     const d = document.createElement('div');
-    d.className = 'dot' + (i===1?' active':'');
+    d.className = 'dot' + (i === 1 ? ' active' : '');
     d.onclick = () => goTo(i);
     d.style.cursor = 'none';
     dotsEl.appendChild(d);
   }
 
   function updateDots() {
-    document.querySelectorAll('.dot').forEach((d,i) => {
-      d.classList.toggle('active', i+1 === current);
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i + 1 === current);
     });
   }
 
   function goTo(n) {
-    if(n < 1 || n > total) return;
-    const prev = slides[current-1];
-    if(n > current) {
+    if (n < 1 || n > total) return;
+    const prev = slides[current - 1];
+    if (n > current) {
       prev.classList.add('exit-left');
     } else {
       prev.style.transform = 'translateX(80px) scale(0.97)';
@@ -1310,10 +1764,10 @@
       prev.style.opacity = '';
     }, 600);
     current = n;
-    const next = slides[current-1];
+    const next = slides[current - 1];
     next.classList.add('active');
     document.getElementById('slide-counter').textContent =
-      String(current).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+      String(current).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
     document.getElementById('prevBtn').disabled = current === 1;
     document.getElementById('nextBtn').disabled = current === total;
     updateDots();
@@ -1322,9 +1776,9 @@
   function changeSlide(dir) { goTo(current + dir); }
 
   document.addEventListener('keydown', e => {
-    if(e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
-    else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
-    else if(e.key === 'Escape') goTo(1);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+    else if (e.key === 'Escape') goTo(1);
   });
 
   // Touch swipe
@@ -1332,8 +1786,41 @@
   document.addEventListener('touchstart', e => touchX = e.touches[0].clientX);
   document.addEventListener('touchend', e => {
     const dx = e.changedTouches[0].clientX - touchX;
-    if(Math.abs(dx) > 50) changeSlide(dx < 0 ? 1 : -1);
+    if (Math.abs(dx) > 50) changeSlide(dx < 0 ? 1 : -1);
   });
+
+  // Slide 9 layer interactions
+  const layerColor = { sensorial: 'accent', inteligencia: 'accent3', actuacion: 'success' };
+  let activeLayer = null;
+
+  function activateLayer(layer) {
+    if (activeLayer === layer) { resetLayers(); return; }
+    activeLayer = layer;
+    const color = layerColor[layer];
+    document.querySelectorAll('.arch-node').forEach(n => {
+      n.classList.remove('lit-accent', 'lit-accent3', 'lit-success', 'dimmed');
+      n.classList.add(n.dataset.layer === layer ? 'lit-' + color : 'dimmed');
+    });
+    document.querySelectorAll('.arch-arrow').forEach(a => {
+      a.classList.remove('lit-accent', 'lit-accent3', 'lit-success', 'dimmed');
+      a.classList.add(a.dataset.layer === layer ? 'lit-' + color : 'dimmed');
+    });
+    document.querySelectorAll('.layer-card').forEach(c => {
+      c.classList.remove('lit-accent', 'lit-accent3', 'lit-success', 'dimmed');
+      c.classList.add(c.dataset.layer === layer ? 'lit-' + color : 'dimmed');
+    });
+  }
+
+  function resetLayers() {
+    activeLayer = null;
+    document.querySelectorAll('.arch-node, .arch-arrow, .layer-card')
+      .forEach(el => el.classList.remove('lit-accent', 'lit-accent3', 'lit-success', 'dimmed'));
+  }
+
+  document.querySelectorAll('.arch-node, .layer-card').forEach(el => {
+    el.addEventListener('click', e => { e.stopPropagation(); activateLayer(el.dataset.layer); });
+  });
+  document.getElementById('slide-9').addEventListener('click', resetLayers);
 </script>
 </body>
 </html>
